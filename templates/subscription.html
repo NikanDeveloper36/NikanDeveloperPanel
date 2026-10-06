@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Nikan Dev Panel Subscription | {{ user_name }}</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+    --bg:#02050c;
+    --card:rgba(7,15,30,.86);
+    --card2:rgba(3,9,20,.95);
+    --blue:#168cff;
+    --cyan:#00eaff;
+    --blue2:#246bff;
+    --purple:#7b4dff;
+    --green:#00f5a0;
+    --red:#ff416c;
+    --white:#f5f9ff;
+    --muted:#71809c;
+    --line:rgba(0,220,255,.15);
+}
+
+html,body{
+    min-height:100%;
+}
+
+body{
+    background:
+        radial-gradient(circle at 8% 0%,rgba(0,160,255,.14),transparent 30%),
+        radial-gradient(circle at 92% 15%,rgba(83,65,255,.12),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(0,210,255,.07),transparent 35%),
+        var(--bg);
+    color:var(--white);
+    font-family:Arial,Helvetica,sans-serif;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-5;
+    background-image:
+        linear-gradient(rgba(0,190,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,190,255,.025) 1px,transparent 1px);
+    background-size:42px 42px;
+    pointer-events:none;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:430px;
+    height:430px;
+    left:50%;
+    top:30%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:rgba(0,145,255,.055);
+    filter:blur(110px);
+    z-index:-4;
+    pointer-events:none;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.page{
+    width:100%;
+    max-width:780px;
+    margin:auto;
+    padding:14px;
+}
+
+.card{
+    position:relative;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,23,45,.86),
+            rgba(3,8,19,.94)
+        );
+    border:1px solid var(--line);
+    border-radius:25px;
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    box-shadow:
+        0 18px 55px rgba(0,0,0,.28),
+        inset 0 0 35px rgba(0,190,255,.025);
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:12%;
+    right:12%;
+    height:1px;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(0,234,255,.7),
+        transparent
+    );
+}
+
+/* HEADER */
+
+.header{
+    padding:17px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.logo{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    font-weight:900;
+    color:var(--cyan);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,234,255,.16),
+            rgba(55,85,255,.16)
+        );
+    border:1px solid rgba(0,234,255,.2);
+    box-shadow:0 0 24px rgba(0,234,255,.12);
+}
+
+.brand h1{
+    font-size:17px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.brand p{
+    margin-top:4px;
+    color:var(--cyan);
+    font-size:8px;
+    letter-spacing:1.7px;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.lang-btn{
+    height:34px;
+    padding:0 11px;
+    border-radius:11px;
+    border:1px solid rgba(0,234,255,.18);
+    background:rgba(0,234,255,.06);
+    color:#9aefff;
+    font-size:9px;
+    font-weight:900;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 10px;
+    border-radius:20px;
+    background:rgba(0,245,160,.055);
+    border:1px solid rgba(0,245,160,.16);
+    color:var(--green);
+    font-size:8px;
+    font-weight:900;
+}
+
+.status-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 9px var(--green);
+}
+
+/* HERO */
+
+.hero{
+    margin-top:14px;
+    padding:24px 17px 18px;
+    text-align:center;
+}
+
+.user-label{
+    color:var(--muted);
+    font-size:8px;
+    letter-spacing:2px;
+    margin-bottom:7px;
+}
+
+.username{
+    font-size:28px;
+    font-weight:900;
+    background:linear-gradient(
+        90deg,
+        #fff,
+        #00eaff,
+        #478cff,
+        #8964ff
+    );
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+/* MAIN CIRCLE */
+
+.usage-circle{
+    position:relative;
+    width:218px;
+    height:218px;
+    margin:24px auto 22px;
+}
+
+.usage-circle svg{
+    width:218px;
+    height:218px;
+    transform:rotate(-90deg);
+    overflow:visible;
+}
+
+.circle-bg{
+    fill:none;
+    stroke:rgba(0,234,255,.065);
+    stroke-width:11;
+}
+
+.circle-value{
+    fill:none;
+    stroke:url(#usageGradient);
+    stroke-width:11;
+    stroke-linecap:round;
+    filter:
+        drop-shadow(0 0 6px rgba(0,234,255,.65))
+        drop-shadow(0 0 14px rgba(0,110,255,.28));
+    transition:stroke-dashoffset 1s ease;
+}
+
+.circle-inner{
+    position:absolute;
+    inset:32px;
+    border-radius:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,125,255,.2),
+            rgba(2,8,20,.92) 68%
+        );
+    border:1px solid rgba(0,234,255,.1);
+    box-shadow:
+        inset 0 0 35px rgba(0,120,255,.1),
+        0 0 30px rgba(0,110,255,.08);
+}
+
+.circle-percent{
+    font-size:36px;
+    font-weight:900;
+    text-shadow:0 0 20px rgba(0,234,255,.4);
+}
+
+.circle-label{
+    margin-top:4px;
+    color:var(--cyan);
+    font-size:9px;
+    letter-spacing:2px;
+    font-weight:900;
+}
+
+.circle-total{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.stat{
+    position:relative;
+    padding:14px 12px;
+    min-height:91px;
+    text-align:left;
+    border-radius:17px;
+    background:rgba(1,7,18,.68);
+    border:1px solid rgba(255,255,255,.055);
+    overflow:hidden;
+}
+
+.stat::after{
+    content:"";
+    position:absolute;
+    right:-25px;
+    bottom:-25px;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:rgba(0,180,255,.05);
+    filter:blur(15px);
+}
+
+.stat-icon{
+    font-size:17px;
+    margin-bottom:8px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:8px;
+    letter-spacing:.7px;
+}
+
+.stat-value{
+    margin-top:5px;
+    font-size:15px;
+    font-weight:900;
+    color:#fff;
+}
+
+/* SECTIONS */
+
+.section{
+    margin-top:14px;
+    padding:18px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.section-title h2{
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.section-title span{
+    color:var(--cyan);
+    font-size:8px;
+    letter-spacing:1.2px;
+}
+
+/* SUBSCRIPTION */
+
+.sub-box{
+    padding:13px;
+    border-radius:17px;
+    background:rgba(0,0,0,.27);
+    border:1px solid rgba(0,234,255,.1);
+}
+
+.sub-label{
+    color:var(--muted);
+    font-size:8px;
+    margin-bottom:8px;
+}
+
+.sub-row{
+    display:flex;
+    gap:7px;
+}
+
+.sub-input{
+    flex:1;
+    min-width:0;
+    height:42px;
+    border-radius:11px;
+    background:#020711;
+    border:1px solid rgba(255,255,255,.06);
+    color:#83efff;
+    padding:0 11px;
+    font-size:9px;
+    outline:none;
+}
+
+.btn{
+    border:0;
+    color:#fff;
+    font-weight:900;
+    border-radius:11px;
+    transition:.18s;
+}
+
+.btn:active{
+    transform:scale(.96);
+}
+
+.copy-btn{
+    width:72px;
+    background:linear-gradient(135deg,#00bfff,#2563ff);
+    box-shadow:0 0 18px rgba(0,191,255,.16);
+}
+
+.action-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:9px;
+}
+
+.action{
+    min-height:44px;
+    background:rgba(0,234,255,.065);
+    border:1px solid rgba(0,234,255,.14);
+    color:#8cefff;
+    font-size:9px;
+}
+
+.action.purple{
+    background:rgba(123,77,255,.08);
+    border-color:rgba(123,77,255,.18);
+    color:#c0adff;
+}
+
+/* USAGE GRAPH */
+
+.graph-box{
+    padding:15px;
+    border-radius:18px;
+    background:rgba(1,7,18,.68);
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.graph-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:13px;
+}
+
+.graph-total{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+}
+
+.graph-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 9px var(--cyan);
+}
+
+.graph-note{
+    color:var(--muted);
+    font-size:8px;
+}
+
+.graph{
+    position:relative;
+    height:150px;
+    overflow:hidden;
+    border-radius:13px;
+    background:
+        linear-gradient(rgba(0,234,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,234,255,.035) 1px,transparent 1px);
+    background-size:100% 30px,50px 100%;
+}
+
+.graph svg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.graph-fill{
+    fill:url(#graphFill);
+}
+
+.graph-line{
+    fill:none;
+    stroke:url(#graphLine);
+    stroke-width:3;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    filter:drop-shadow(0 0 5px rgba(0,234,255,.5));
+}
+
+.graph-labels{
+    display:flex;
+    justify-content:space-between;
+    margin-top:8px;
+    color:#53627c;
+    font-size:7px;
+}
+
+/* CONFIGS */
+
+.config{
+    padding:14px;
+    margin-bottom:9px;
+    border-radius:17px;
+    background:rgba(1,7,18,.72);
+    border:1px solid rgba(255,255,255,.055);
+    transition:.2s;
+}
+
+.config:last-child{
+    margin-bottom:0;
+}
+
+.config:active{
+    border-color:rgba(0,234,255,.3);
+}
+
+.config-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.config-title{
+    font-size:11px;
+    font-weight:900;
+    color:#fff;
+}
+
+.config-tag{
+    margin-top:5px;
+    color:#71809c;
+    font-size:8px;
+}
+
+.config-actions{
+    display:flex;
+    gap:5px;
+    flex-shrink:0;
+}
+
+.small-btn{
+    padding:8px 10px;
+    font-size:8px;
+}
+
+.small-copy{
+    background:linear-gradient(135deg,#00bfff,#2563ff);
+}
+
+.small-qr{
+    background:rgba(123,77,255,.13);
+    border:1px solid rgba(123,77,255,.2);
+    color:#c5b8ff;
+}
+
+/* CREATED BY */
+
+.creator{
+    margin-top:14px;
+    padding:17px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.creator-left{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.creator-icon{
+    width:39px;
+    height:39px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,234,255,.07);
+    border:1px solid rgba(0,234,255,.13);
+    color:var(--cyan);
+}
+
+.creator-title{
+    font-size:9px;
+    color:var(--muted);
+}
+
+.creator-name{
+    margin-top:4px;
+    font-size:11px;
+    font-weight:900;
+}
+
+.creator-link{
+    text-decoration:none;
+    color:#8cefff;
+    font-size:9px;
+    font-weight:900;
+    padding:9px 12px;
+    border-radius:11px;
+    background:rgba(0,234,255,.06);
+    border:1px solid rgba(0,234,255,.13);
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    padding:20px 5px 14px;
+}
+
+.footer-main{
+    color:#4e5d76;
+    font-size:9px;
+}
+
+.footer-main b{
+    color:var(--cyan);
+}
+
+.footer-sub{
+    margin-top:6px;
+    color:#35425a;
+    font-size:7px;
+    letter-spacing:1.5px;
+}
+
+/* QR MODAL */
+
+#qrModal{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.84);
+    backdrop-filter:blur(14px);
+}
+
+#qrModal.active{
+    display:flex;
+}
+
+.qr-wrap{
+    text-align:center;
+}
+
+.qr-box{
+    padding:20px;
+    border-radius:24px;
+    background:#fff;
+    box-shadow:
+        0 0 50px rgba(0,234,255,.22);
+}
+
+.qr-close{
+    margin-top:13px;
+    color:#94a3b8;
+    font-size:9px;
+    font-weight:800;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    z-index:2000;
+    left:50%;
+    bottom:20px;
+    transform:translate(-50%,100px);
+    padding:11px 18px;
+    border-radius:30px;
+    background:#071525;
+    border:1px solid rgba(0,234,255,.25);
+    color:#8cefff;
+    font-size:9px;
+    font-weight:900;
+    box-shadow:0 0 25px rgba(0,234,255,.15);
+    transition:.25s;
+    white-space:nowrap;
+}
+
+.toast.show{
+    transform:translate(-50%,0);
+}
+
+/* MOBILE */
+
+@media(max-width:520px){
+
+    .page{
+        padding:10px;
+    }
+
+    .header{
+        padding:14px;
+    }
+
+    .logo{
+        width:40px;
+        height:40px;
+    }
+
+    .brand h1{
+        font-size:15px;
+    }
+
+    .status{
+        display:none;
+    }
+
+    .username{
+        font-size:24px;
+    }
+
+    .usage-circle,
+    .usage-circle svg{
+        width:195px;
+        height:195px;
+    }
+
+    .circle-inner{
+        inset:29px;
+    }
+
+    .circle-percent{
+        font-size:32px;
+    }
+
+    .stat{
+        min-height:86px;
+        padding:12px 10px;
+    }
+
+    .section{
+        padding:15px;
+    }
+
+    .creator{
+        padding:14px;
+    }
+}
+
+@media(max-width:360px){
+
+    .brand p{
+        display:none;
+    }
+
+    .lang-btn{
+        padding:0 8px;
+    }
+
+    .stats{
+        gap:7px;
+    }
+
+    .stat-value{
+        font-size:13px;
+    }
+
+    .action-grid{
+        grid-template-columns:1fr;
+    }
+
+    .sub-row{
+        flex-direction:column;
+    }
+
+    .copy-btn{
+        width:100%;
+        height:40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="card header">
+
+        <div class="brand">
+
+            <div class="logo">N</div>
+
+            <div>
+                <h1>Nikan Dev Panel</h1>
+                <p id="brandSubtitle">SUBSCRIPTION PANEL</p>
+            </div>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                class="lang-btn"
+                onclick="toggleLanguage()"
+                id="langBtn">
+                فارسی
+            </button>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                <span id="statusText">ACTIVE</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- USER / USAGE -->
+    <section class="card hero">
+
+        <div class="user-label" id="userLabel">
+            SUBSCRIPTION USER
+        </div>
+
+        <div class="username">
+            {{ user_name }}
+        </div>
+
+
+        <div class="usage-circle">
+
+            <svg viewBox="0 0 218 218">
+
+                <defs>
+
+                    <linearGradient
+                        id="usageGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+
+                        <stop offset="0%" stop-color="#00eaff"/>
+                        <stop offset="50%" stop-color="#168cff"/>
+                        <stop offset="100%" stop-color="#7b4dff"/>
+
+                    </linearGradient>
+
+                </defs>
+
+                <circle
+                    class="circle-bg"
+                    cx="109"
+                    cy="109"
+                    r="88">
+                </circle>
+
+                <circle
+                    id="usageCircle"
+                    class="circle-value"
+                    cx="109"
+                    cy="109"
+                    r="88"
+                    stroke-dasharray="552.92"
+                    stroke-dashoffset="{{ 552.92 - (552.92 * percent / 100) }}">
+                </circle>
+
+            </svg>
+
+            <div class="circle-inner">
+
+                <div class="circle-percent">
+                    {{ percent }}%
+                </div>
+
+                <div
+                    class="circle-label"
+                    id="usedLabel">
+                    USED
+                </div>
+
+                <div class="circle-total">
+                    {{ quota_gb }} GB
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-icon"></div>
+
+                <div
+                    class="stat-label"
+                    data-en="TOTAL TRAFFIC"
+                    data-fa="حجم کل">
+                    TOTAL TRAFFIC
+                </div>
+
+                <div class="stat-value">
+                    {{ quota_gb }} GB
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon"></div>
+
+                <div
+                    class="stat-label"
+                    data-en="USED TRAFFIC"
+                    data-fa="حجم مصرف شده">
+                    USED TRAFFIC
+                </div>
+
+                <div class="stat-value">
+                    {{ used_gb }} GB
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon"></div>
+
+                <div
+                    class="stat-label"
+                    data-en="REMAINING"
+                    data-fa="حجم باقی مانده">
+                    REMAINING
+                </div>
+
+                <div class="stat-value">
+                    {{ remaining_gb }} GB
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon"></div>
+
+                <div
+                    class="stat-label"
+                    data-en="DAYS LEFT"
+                    data-fa="روزهای باقی مانده">
+                    DAYS LEFT
+                </div>
+
+                <div class="stat-value">
+                    {{ days_left }} DAYS
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SUBSCRIPTION -->
+
+    <section class="card section">
+
+        <div class="section-title">
+
+            <h2 id="subTitle">
+                SUBSCRIPTION LINK
+            </h2>
+
+            <span id="syncText">
+                SYNC READY
+            </span>
+
+        </div>
+
+
+        <div class="sub-box">
+
+            <div
+                class="sub-label"
+                id="personalSub">
+                YOUR PERSONAL SUBSCRIPTION
+            </div>
+
+
+            <div class="sub-row">
+
+                <input
+                    id="subUrlField"
+                    class="sub-input"
+                    value="{{ sub_url }}"
+                    readonly
+                >
+
+                <button
+                    onclick="copySubLink()"
+                    class="btn copy-btn"
+                    id="copySubBtn">
+                    COPY
+                </button>
+
+            </div>
+
+
+            <div class="action-grid">
+
+                <button
+                    onclick="openSubLink()"
+                    class="btn action"
+                    id="openBtn">
+                    OPEN SUBSCRIPTION
+                </button>
+
+                <button
+                    onclick="copyAllConfigs()"
+                    class="btn action purple"
+                    id="copyAllBtn">
+                    COPY ALL CONFIGS
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- USAGE GRAPH -->
+
+    <section class="card section">
+
+        <div class="section-title">
+
+            <h2 id="usageTitle">
+                USAGE OVERVIEW
+            </h2>
+
+            <span id="usageBadge">
+                LIVE DATA
+            </span>
+
+        </div>
+
+
+        <div class="graph-box">
+
+            <div class="graph-head">
+
+                <div class="graph-total">
+
+                    <span class="graph-dot"></span>
+
+                    <span id="consumedText">
+                        {{ used_gb }} GB USED
+                    </span>
+
+                </div>
+
+                <div
+                    class="graph-note"
+                    id="graphNote">
+                    Current usage
+                </div>
+
+            </div>
+
+
+            <div class="graph">
+
+                <svg
+                    viewBox="0 0 700 150"
+                    preserveAspectRatio="none">
+
+                    <defs>
+
+                        <linearGradient
+                            id="graphLine"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="0">
+
+                            <stop offset="0%" stop-color="#00eaff"/>
+                            <stop offset="50%" stop-color="#168cff"/>
+                            <stop offset="100%" stop-color="#7b4dff"/>
+
+                        </linearGradient>
+
+
+                        <linearGradient
+                            id="graphFill"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1">
+
+                            <stop
+                                offset="0%"
+                                stop-color="#00bfff"
+                                stop-opacity=".20"/>
+
+                            <stop
+                                offset="100%"
+                                stop-color="#00bfff"
+                                stop-opacity="0"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+
+                    <!-- Decorative usage curve.
+                         The real current usage is shown above
+                         and in the main percentage ring. -->
+
+                    <path
+                        class="graph-fill"
+                        d="
+                        M0 119
+                        C40 108 58 127 95 108
+                        S150 75 190 103
+                        S250 125 285 91
+                        S340 68 375 97
+                        S435 120 470 79
+                        S535 61 565 91
+                        S625 123 700 63
+                        L700 150
+                        L0 150 Z">
+                    </path>
+
+
+                    <path
+                        class="graph-line"
+                        d="
+                        M0 119
+                        C40 108 58 127 95 108
+                        S150 75 190 103
+                        S250 125 285 91
+                        S340 68 375 97
+                        S435 120 470 79
+                        S535 61 565 91
+                        S625 123 700 63">
+                    </path>
+
+                </svg>
+
+            </div>
+
+
+            <div class="graph-labels">
+
+                <span id="graphStart">START</span>
+                <span id="graphMiddle">USAGE</span>
+                <span id="graphEnd">NOW</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONFIGS -->
+
+    <section class="card section">
+
+        <div class="section-title">
+
+            <h2 id="configsTitle">
+                YOUR CONFIGS
+            </h2>
+
+            <span>
+                {{ configs|length }} CONFIGS
+            </span>
+
+        </div>
+
+
+        {% for cfg in configs %}
+
+        <div class="config">
+
+            <div class="config-top">
+
+                <div>
+
+                    <div class="config-title">
+                        {{ cfg.title }}
+                    </div>
+
+                    <div class="config-tag">
+                        {{ cfg.tag if cfg.tag is defined else cfg.desc }}
+                    </div>
+
+                </div>
+
+
+                <div class="config-actions">
+
+                    <button
+                        onclick="copyText(`{{ cfg.config }}`)"
+                        class="btn small-btn small-copy">
+                        <span class="copyConfigText">COPY</span>
+                    </button>
+
+                    <button
+                        onclick="showMiniQR(`{{ cfg.config }}`)"
+                        class="btn small-btn small-qr">
+                        QR
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </section>
+
+
+    <!-- CREATED BY -->
+
+    <section class="card creator">
+
+        <div class="creator-left">
+
+            <div class="creator-icon">
+                ✦
+            </div>
+
+            <div>
+
+                <div
+                    class="creator-title"
+                    id="createdText">
+                    CREATED BY
+                </div>
+
+                <div class="creator-name">
+                    Nikan Developer
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="https://t.me/NeuralDevvv"
+            target="_blank"
+            class="creator-link">
+            @NeuralDevvv
+        </a>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="footer-main">
+            <span id="poweredText">POWERED BY</span>
+            <b>Nikan Dev Panel</b>
+        </div>
+
+        <div class="footer-sub">
+            NIKAN DEV PANEL SUBSCRIPTION
+        </div>
+
+    </footer>
+
+</div>
+
+
+<!-- QR MODAL -->
+
+<div
+    id="qrModal"
+    onclick="closeMiniQR()">
+
+    <div
+        class="qr-wrap"
+        onclick="event.stopPropagation()">
+
+        <div class="qr-box">
+            <div id="miniQR"></div>
+        </div>
+
+        <div
+            class="qr-close"
+            id="qrCloseText">
+            TAP OUTSIDE TO CLOSE
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    id="toast"
+    class="toast">
+    COPIED
+</div>
+
+
+<script>
+
+/* =========================
+   SUBSCRIPTION DATA
+========================= */
+
+const subLink = "{{ sub_url }}";
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(text){
+
+    const toast = document.getElementById("toast");
+
+    toast.innerText = text;
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(function(){
+
+        toast.classList.remove("show");
+
+    },1800);
+}
+
+
+/* =========================
+   COPY SUBSCRIPTION
+========================= */
+
+function copySubLink(){
+
+    navigator.clipboard.writeText(subLink)
+    .then(function(){
+
+        showToast(
+            currentLang === "fa"
+            ? "لینک اشتراک کپی شد"
+            : "SUBSCRIPTION COPIED"
+        );
+
+    });
+
+}
+
+
+/* =========================
+   OPEN SUBSCRIPTION
+========================= */
+
+function openSubLink(){
+
+    window.open(
+        subLink,
+        "_blank"
+    );
+
+}
+
+
+/* =========================
+   COPY ALL
+========================= */
+
+function copyAllConfigs(){
+
+    try{
+
+        const raw = atob("{{ sub_raw }}");
+
+        navigator.clipboard.writeText(raw)
+        .then(function(){
+
+            showToast(
+                currentLang === "fa"
+                ? "همه کانفیگ‌ها کپی شدند"
+                : "ALL CONFIGS COPIED"
+            );
+
+        });
+
+    }catch(error){
+
+        showToast(
+            currentLang === "fa"
+            ? "خطا در کپی کانفیگ‌ها"
+            : "COPY ERROR"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   COPY CONFIG
+========================= */
+
+function copyText(txt){
+
+    navigator.clipboard.writeText(txt)
+    .then(function(){
+
+        showToast(
+            currentLang === "fa"
+            ? "کانفیگ کپی شد"
+            : "CONFIG COPIED"
+        );
+
+    });
+
+}
+
+
+/* =========================
+   QR
+========================= */
+
+function showMiniQR(cfg){
+
+    const modal =
+        document.getElementById("qrModal");
+
+    const box =
+        document.getElementById("miniQR");
+
+    box.innerHTML = "";
+
+    new QRCode(box,{
+        text:cfg,
+        width:220,
+        height:220,
+        correctLevel:QRCode.CorrectLevel.M
+    });
+
+    modal.classList.add("active");
+
+}
+
+
+function closeMiniQR(){
+
+    document
+        .getElementById("qrModal")
+        .classList.remove("active");
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+let currentLang = "en";
+
+
+const translations = {
+
+    en:{
+        lang:"فارسی",
+        subtitle:"SUBSCRIPTION PANEL",
+        status:"ACTIVE",
+        user:"SUBSCRIPTION USER",
+        used:"USED",
+        totalTraffic:"TOTAL TRAFFIC",
+        usedTraffic:"USED TRAFFIC",
+        remaining:"REMAINING",
+        daysLeft:"DAYS LEFT",
+        days:"DAYS",
+        subscription:"SUBSCRIPTION LINK",
+        sync:"SYNC READY",
+        personal:"YOUR PERSONAL SUBSCRIPTION",
+        copy:"COPY",
+        open:"OPEN SUBSCRIPTION",
+        copyAll:"COPY ALL CONFIGS",
+        overview:"USAGE OVERVIEW",
+        live:"LIVE DATA",
+        current:"Current usage",
+        start:"START",
+        usage:"USAGE",
+        now:"NOW",
+        configs:"YOUR CONFIGS",
+        created:"CREATED BY",
+        powered:"POWERED BY",
+        qrClose:"TAP OUTSIDE TO CLOSE"
+    },
+
+    fa:{
+        lang:"English",
+        subtitle:"پنل اشتراک",
+        status:"فعال",
+        user:"کاربر اشتراک",
+        used:"مصرف شده",
+        totalTraffic:"حجم کل",
+        usedTraffic:"حجم مصرف شده",
+        remaining:"حجم باقی مانده",
+        daysLeft:"روزهای باقی مانده",
+        days:"روز",
+        subscription:"لینک اشتراک",
+        sync:"آماده همگام‌سازی",
+        personal:"اشتراک اختصاصی شما",
+        copy:"کپی",
+        open:"باز کردن اشتراک",
+        copyAll:"کپی همه کانفیگ‌ها",
+        overview:"نمای کلی مصرف",
+        live:"اطلاعات زنده",
+        current:"مصرف فعلی",
+        start:"شروع",
+        usage:"مصرف",
+        now:"اکنون",
+        configs:"کانفیگ‌های شما",
+        created:"ساخته شده توسط",
+        powered:"ارائه شده توسط",
+        qrClose:"برای بستن بیرون را لمس کنید"
+    }
+
+};
+
+
+function toggleLanguage(){
+
+    currentLang =
+        currentLang === "en"
+        ? "fa"
+        : "en";
+
+    applyLanguage();
+
+}
+
+
+function applyLanguage(){
+
+    const t =
+        translations[currentLang];
+
+    document.documentElement.lang =
+        currentLang;
+
+    document.documentElement.dir =
+        currentLang === "fa"
+        ? "rtl"
+        : "ltr";
+
+
+    document.getElementById("langBtn").innerText =
+        t.lang;
+
+    document.getElementById("brandSubtitle").innerText =
+        t.subtitle;
+
+    document.getElementById("statusText").innerText =
+        t.status;
+
+    document.getElementById("userLabel").innerText =
+        t.user;
+
+    document.getElementById("usedLabel").innerText =
+        t.used;
+
+    document.getElementById("subTitle").innerText =
+        t.subscription;
+
+    document.getElementById("syncText").innerText =
+        t.sync;
+
+    document.getElementById("personalSub").innerText =
+        t.personal;
+
+    document.getElementById("copySubBtn").innerText =
+        t.copy;
+
+    document.getElementById("openBtn").innerText =
+        t.open;
+
+    document.getElementById("copyAllBtn").innerText =
+        t.copyAll;
+
+    document.getElementById("usageTitle").innerText =
+        t.overview;
+
+    document.getElementById("usageBadge").innerText =
+        t.live;
+
+    document.getElementById("graphNote").innerText =
+        t.current;
+
+    document.getElementById("graphStart").innerText =
+        t.start;
+
+    document.getElementById("graphMiddle").innerText =
+        t.usage;
+
+    document.getElementById("graphEnd").innerText =
+        t.now;
+
+    document.getElementById("configsTitle").innerText =
+        t.configs;
+
+    document.getElementById("createdText").innerText =
+        t.created;
+
+    document.getElementById("poweredText").innerText =
+        t.powered;
+
+    document.getElementById("qrCloseText").innerText =
+        t.qrClose;
+
+
+    document.querySelectorAll(".stat-label")
+        .forEach(function(el){
+
+            el.innerText =
+                currentLang === "fa"
+                ? el.dataset.fa
+                : el.dataset.en;
+
+        });
+
+
+    document.querySelectorAll(".copyConfigText")
+        .forEach(function(el){
+
+            el.innerText = t.copy;
+
+        });
+
+
+    document.querySelectorAll(".stat-value")
+        .forEach(function(el,index){
+
+            if(index === 3){
+
+                const value =
+                    el.innerText
+                        .replace(" DAYS","")
+                        .replace(" روز","");
+
+                el.innerText =
+                    value +
+                    (currentLang === "fa"
+                    ? " روز"
+                    : " DAYS");
+
+            }
+
+        });
+
+}
+
+
+/* =========================
+   INIT
+========================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        applyLanguage();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

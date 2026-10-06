@@ -1,0 +1,288 @@
+# ✦ N I K A N · D E V · P A N E L ✦
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:05001A,45:101B4D,75:312E81,100:00BFFF&height=190&section=header&text=%E2%9C%A6%20P%20A%20B%20L%20O%20%C2%B7%20P%20A%20N%20E%20L%20%E2%9C%A6&fontColor=FFFFFF&fontSize=38&fontAlignY=42&animation=twinkling" width="100%"/>
+</p>
+
+<p align="center">
+  <strong>پنل مدرن و حرفه‌ای برای مدیریت سرویس‌ها، کاربران، کانفیگ‌ها و اشتراک‌ها</strong>
+</p>
+
+<p align="center">
+  <a href="https://railway.app/">
+    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:312E81,100:00BFFF&height=55&text=%E2%9C%A6%20DEPLOY%20ON%20RAILWAY%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
+  </a>
+  &nbsp;
+  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel">
+    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:4C1D95,100:7C3AED&height=55&text=%E2%9C%A6%20VIEW%20ON%20GITHUB%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
+  </a>
+</p>
+
+---
+
+## ✦ درباره Nikan Dev Panel
+
+**Nikan Dev Panel** یک پنل مدرن برای مدیریت سرویس‌ها و اطلاعات کاربران است که با تمرکز روی ظاهر حرفه‌ای، استفاده راحت در موبایل و نمایش مرتب اطلاعات طراحی شده است.
+
+پنل می‌تواند اطلاعات سرویس‌ها، کاربران، حجم مصرفی، تاریخ انقضا، کانفیگ‌ها و لینک اشتراک را در یک رابط کاربری جمع‌وجور و مدرن نمایش دهد.
+
+هدف پروژه این است که مدیریت سرویس برای کاربر نهایی ساده باشد و در عین حال ظاهر پنل حس یک داشبورد حرفه‌ای و مدرن را منتقل کند.
+
+---
+
+## ✦ ظاهر و تجربه کاربری
+
+رابط کاربری Nikan Dev Panel بر پایه یک ظاهر تاریک و مدرن طراحی شده است.
+
+• پس‌زمینه تیره و فضایی  
+• ترکیب آبی، Cyan و Purple  
+• کارت‌های شیشه‌ای و نیمه‌شفاف  
+• افکت‌های Glow و نورپردازی نرم  
+• ستاره‌ها و پس‌زمینه متحرک  
+• انیمیشن‌های سبک و روان  
+• طراحی Mobile First  
+• سازگار با صفحه‌های کوچک موبایل  
+• بدون اسکرول افقی و بیرون‌زدگی محتوا  
+• دکمه‌های Copy برای اطلاعات مهم  
+• نمایش مرتب اطلاعات سرویس  
+
+نمای کلی رابط:
+
+<pre>
+╭──────────────────────────────╮
+│      ✦ NIKAN DEV PANEL ✦     │
+│                              │
+│   USERNAME                   │
+│   ───────────────────────    │
+│   ● ACTIVE                   │
+│                              │
+│   VOLUME                     │
+│   ███████████░░░  72%       │
+│                              │
+│   USED       REMAINING      │
+│   28 GB         72 GB       │
+│                              │
+│   EXPIRATION                 │
+│   30 DAYS REMAINING          │
+│                              │
+│   ┌──────────────────────┐   │
+│   │   COPY SUBSCRIPTION  │   │
+│   └──────────────────────┘   │
+╰──────────────────────────────╯
+</pre>
+
+---
+
+## 🧩 پنل از چه بخش‌هایی تشکیل شده؟
+
+Nikan Dev Panel فقط یک صفحه ساده برای نمایش لینک نیست؛ بخش‌های مختلف پنل برای مدیریت اطلاعات سرویس کنار هم قرار گرفته‌اند.
+
+### 👤 کاربران
+
+اطلاعات هر کاربر می‌تواند شامل موارد زیر باشد:
+
+• Username  
+• وضعیت سرویس  
+• حجم کل  
+• حجم مصرف‌شده  
+• حجم باقی‌مانده  
+• درصد مصرف  
+• تاریخ شروع  
+• تاریخ انقضا  
+• زمان باقی‌مانده  
+• UUID یا شناسه سرویس  
+• اطلاعات اتصال در صورت وجود  
+
+---
+
+### 🔗 کانفیگ‌ها
+
+کانفیگ‌های مربوط به هر سرویس به صورت جداگانه نمایش داده می‌شوند.
+
+برای هر کانفیگ می‌توان:
+
+• کانفیگ را مشاهده کرد  
+• کانفیگ را کپی کرد  
+• چند کانفیگ را جداگانه مدیریت کرد  
+• اطلاعات را بدون شلوغی در صفحه مشاهده کرد  
+
+---
+
+### 📡 Subscription
+
+برای هر سرویس می‌توان لینک Subscription مربوط به همان کاربر را نمایش داد.
+
+کاربر می‌تواند لینک اشتراک خود را مستقیماً از داخل پنل دریافت و کپی کند.
+
+---
+
+### 📊 مصرف حجم
+
+اطلاعات مصرف سرویس به صورت واضح نمایش داده می‌شود:
+
+<pre>
+Total
+100 GB
+
+Used
+28 GB
+
+Remaining
+72 GB
+
+Usage
+28%
+██████░░░░░░░░░░
+</pre>
+
+---
+
+### ⏳ زمان سرویس
+
+پنل می‌تواند وضعیت زمانی سرویس را نمایش دهد:
+
+• تاریخ شروع  
+• تاریخ پایان  
+• روزهای باقی‌مانده  
+• وضعیت Active  
+• وضعیت Expired  
+
+---
+
+### ⚙️ تنظیمات
+
+اطلاعات اتصال و تنظیمات مورد نیاز پروژه می‌توانند از طریق Environment Variables یا تنظیمات پروژه مدیریت شوند.
+
+به این ترتیب اطلاعات حساس مستقیماً داخل رابط کاربری قرار نمی‌گیرند.
+
+---
+
+# 🚀 راه‌اندازی
+
+راه‌اندازی پروژه ساده طراحی شده است.
+
+**فقط پروژه را Deploy کن و تمام.**
+
+برای اجرای پروژه روی Railway:
+
+1. وارد Repository پروژه شوید.
+2. پروژه را به Railway متصل کنید.
+3. متغیرهای محیطی مورد نیاز را وارد کنید.
+4. Deploy را بزنید.
+5. بعد از اتمام Deploy، آدرس پنل در اختیار شما قرار می‌گیرد.
+
+---
+
+# ☁️ Deploy روی Railway
+
+برای اجرای سریع پروژه می‌توانید از Railway استفاده کنید.
+
+<p align="center">
+  <a href="https://railway.app/">
+    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:312E81,100:00BFFF&height=55&text=%E2%9C%A6%20DEPLOY%20ON%20RAILWAY%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
+  </a>
+</p>
+
+بعد از اتصال Repository:
+
+<pre>
+GitHub Repository
+       ↓
+    Railway
+       ↓
+ Environment Variables
+       ↓
+     Deploy
+       ↓
+   Nikan Dev Panel
+</pre>
+
+---
+
+# 📱 Mobile First
+
+Nikan Dev Panel با تمرکز روی موبایل ساخته شده است.
+
+طراحی صفحه باید به گونه‌ای باشد که:
+
+• محتوا از عرض صفحه خارج نشود  
+• اسکرول افقی ایجاد نشود  
+• کارت‌ها بیش از حد بزرگ نباشند  
+• متن‌ها روی صفحه به هم نریزند  
+• دکمه‌ها برای لمس موبایل مناسب باشند  
+• اطلاعات مهم بدون اسکرول‌های غیرضروری قابل مشاهده باشند  
+
+پنل برای استفاده روزمره روی صفحه‌های کوچک طراحی شده است.
+
+---
+
+# ⚡ ویژگی‌های اصلی
+
+• داشبورد مدرن  
+• طراحی مخصوص موبایل  
+• نمایش وضعیت سرویس  
+• نمایش حجم کل  
+• نمایش حجم مصرف‌شده  
+• نمایش حجم باقی‌مانده  
+• نمایش درصد مصرف  
+• نمایش تاریخ انقضا  
+• نمایش زمان باقی‌مانده  
+• نمایش Subscription  
+• نمایش کانفیگ‌ها  
+• Copy سریع اطلاعات  
+• طراحی Dark  
+• افکت‌های Neon  
+• Glass UI  
+• پس‌زمینه متحرک  
+• سازگار با Railway  
+• قابلیت اتصال به Backend و API  
+
+---
+
+# ✦ هدف پروژه
+
+هدف Nikan Dev Panel ساخت یک تجربه ساده و حرفه‌ای برای کاربری است که فقط می‌خواهد وارد پنل شود، وضعیت سرویس خود را ببیند و اطلاعات اتصالش را سریع دریافت کند.
+
+بدون صفحه‌های شلوغ.
+
+بدون منوهای اضافه.
+
+بدون طراحی قدیمی.
+
+فقط یک داشبورد مدرن، سریع و قابل استفاده.
+
+---
+
+# ⭐ حمایت از پروژه
+
+اگر این پروژه برایت مفید بود، می‌توانی با Star کردن Repository از پروژه حمایت کنی.
+
+<p align="center">
+  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel">
+    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:4C1D95,100:7C3AED&height=55&text=%E2%9C%A6%20%E2%98%85%20STAR%20THE%20PROJECT%20%E2%98%85%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
+  </a>
+</p>
+
+---
+
+# ✦ Repository
+
+<p align="center">
+  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel">
+    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:312E81,100:00BFFF&height=55&text=%E2%9C%A6%20VIEW%20NIKAN%20DEV%20PANEL%20ON%20GITHUB%20%E2%9C%A6&fontColor=FFFFFF&fontSize=17&fontAlignY=52&animation=twinkling" />
+  </a>
+</p>
+
+---
+
+# 💙 حرف آخر
+
+Nikan Dev Panel برای این ساخته شده که مدیریت سرویس‌ها و نمایش اطلاعات کاربران، هم ساده باشد و هم ظاهر حرفه‌ای خودش را حفظ کند.
+
+**مدیریت سرویس، ساده‌تر از همیشه.**
+
+ساخته شده با ♥️ توسط [@NeuralDevvv](https://t.me/NeuralDevvv)
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00BFFF,45:312E81,75:101B4D,100:05001A&height=120&section=footer&animation=twinkling" width="100%"/>
+</p>

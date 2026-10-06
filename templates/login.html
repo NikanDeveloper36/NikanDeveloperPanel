@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Nikan Dev Panel | Login</title>
+
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+    --bg:#02030b;
+    --card:rgba(5,8,20,.90);
+    --blue:#00eaff;
+    --cyan:#00c8ff;
+    --purple:#7c3cff;
+    --pink:#c43cff;
+    --text:#f5f8ff;
+    --muted:#71809b;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(0,234,255,.15),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            rgba(124,60,255,.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(40,80,255,.06),
+            transparent 45%
+        ),
+        #02030b;
+
+    color:var(--text);
+    font-family:Arial,sans-serif;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+
+    background-image:
+        linear-gradient(
+            rgba(0,234,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,234,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size:42px 42px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:1px;
+    left:0;
+    top:-10%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,234,255,.55),
+            rgba(124,60,255,.55),
+            transparent
+        );
+
+    box-shadow:
+        0 0 20px rgba(0,234,255,.5);
+
+    animation:scan 7s linear infinite;
+}
+
+@keyframes scan{
+    0%{
+        top:-10%;
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    90%{
+        opacity:1;
+    }
+
+    100%{
+        top:110%;
+        opacity:0;
+    }
+}
+
+.login-wrap{
+    width:100%;
+    max-width:430px;
+    position:relative;
+
+    animation:
+        appear .7s ease;
+}
+
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:
+            translateY(25px)
+            scale(.96);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+/* GLOW */
+
+.glow{
+    position:absolute;
+    width:260px;
+    height:260px;
+
+    top:-100px;
+    left:-110px;
+
+    border-radius:50%;
+
+    background:#00eaff;
+
+    filter:blur(120px);
+
+    opacity:.12;
+
+    pointer-events:none;
+}
+
+.glow2{
+    position:absolute;
+    width:240px;
+    height:240px;
+
+    right:-110px;
+    bottom:-100px;
+
+    border-radius:50%;
+
+    background:#7c3cff;
+
+    filter:blur(120px);
+
+    opacity:.15;
+
+    pointer-events:none;
+}
+
+/* CARD */
+
+.card{
+    position:relative;
+
+    padding:
+        30px
+        24px
+        23px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,17,36,.95),
+            rgba(3,5,15,.95)
+        );
+
+    border:
+        1px solid
+        rgba(0,220,255,.20);
+
+    backdrop-filter:blur(30px);
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.7),
+        0 0 50px rgba(0,220,255,.08),
+        inset 0 1px rgba(255,255,255,.08);
+
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:10%;
+
+    width:80%;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #00eaff,
+            #2874ff,
+            #9b4dff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px #00eaff,
+        0 0 30px rgba(124,60,255,.5);
+}
+
+/* LOGO */
+
+.brand{
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+.logo-wrap{
+    width:115px;
+    height:115px;
+
+    margin:
+        0 auto
+        15px;
+
+    border-radius:28px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(0,0,0,.28);
+
+    border:
+        1px solid
+        rgba(0,234,255,.20);
+
+    box-shadow:
+        0 0 30px rgba(0,234,255,.13),
+        0 0 60px rgba(124,60,255,.08),
+        inset 0 0 25px rgba(0,234,255,.04);
+
+    overflow:hidden;
+
+    animation:
+        logoGlow 3s ease-in-out infinite;
+}
+
+.logo-wrap img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+}
+
+@keyframes logoGlow{
+    0%,100%{
+        box-shadow:
+            0 0 25px rgba(0,234,255,.12),
+            0 0 50px rgba(124,60,255,.06);
+    }
+
+    50%{
+        box-shadow:
+            0 0 35px rgba(0,234,255,.25),
+            0 0 65px rgba(124,60,255,.14);
+    }
+}
+
+.brand h1{
+    font-size:31px;
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #00eaff,
+            #4285ff,
+            #a14dff
+        );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    background-clip:text;
+
+    text-shadow:
+        0 0 25px
+        rgba(0,234,255,.15);
+}
+
+.brand p{
+    margin-top:8px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    font-weight:700;
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    width:max-content;
+
+    margin:
+        19px auto 0;
+
+    padding:
+        7px 13px;
+
+    border-radius:30px;
+
+    background:
+        rgba(0,234,255,.035);
+
+    border:
+        1px solid
+        rgba(0,234,255,.10);
+
+    color:#8290a7;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+.status-dot{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:#00eaff;
+
+    box-shadow:
+        0 0 10px #00eaff;
+
+    animation:pulse 1.7s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:.45;
+        transform:scale(.7);
+    }
+}
+
+/* FORM */
+
+.form{
+    margin-top:27px;
+
+    position:relative;
+    z-index:2;
+}
+
+.group{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#9aa9c1;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+}
+
+.input-wrap{
+    position:relative;
+}
+
+.input-icon{
+    position:absolute;
+
+    left:15px;
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    color:#465671;
+
+    font-size:12px;
+
+    pointer-events:none;
+}
+
+input{
+    width:100%;
+    height:53px;
+
+    padding:
+        0 15px 0 40px;
+
+    border-radius:15px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.075);
+
+    background:
+        rgba(2,7,18,.92);
+
+    color:white;
+
+    outline:none;
+
+    font-size:13px;
+
+    transition:.25s;
+
+    box-shadow:
+        inset 0 0 15px
+        rgba(0,0,0,.2);
+}
+
+input:focus{
+    border-color:
+        rgba(0,234,255,.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(0,234,255,.04),
+
+        0 0 25px
+        rgba(0,234,255,.12);
+}
+
+.input-wrap:focus-within .input-icon{
+    color:#00eaff;
+
+    text-shadow:
+        0 0 10px
+        rgba(0,234,255,.5);
+}
+
+input::placeholder{
+    color:#3d4b63;
+}
+
+/* BUTTON */
+
+.btn{
+    position:relative;
+
+    width:100%;
+    height:54px;
+
+    margin-top:4px;
+
+    border:0;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    color:white;
+
+    font-weight:900;
+
+    font-size:12px;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            100deg,
+            #00bff5,
+            #2865ff,
+            #713cff,
+            #a53cff
+        );
+
+    box-shadow:
+        0 0 25px
+        rgba(0,191,255,.20),
+
+        0 10px 30px
+        rgba(0,0,0,.3),
+
+        inset 0 1px
+        rgba(255,255,255,.25);
+
+    transition:.25s;
+}
+
+.btn::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:70%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+        );
+
+    transform:skewX(-20deg);
+
+    transition:.6s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 0 35px
+        rgba(0,191,255,.3),
+
+        0 12px 35px
+        rgba(0,0,0,.4);
+}
+
+.btn:hover::before{
+    left:130%;
+}
+
+.btn:active{
+    transform:scale(.985);
+}
+
+/* ERROR */
+
+.error{
+    margin-top:19px;
+
+    padding:12px;
+
+    border-radius:13px;
+
+    text-align:center;
+
+    color:#ff7895;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    border:
+        1px solid
+        rgba(255,70,110,.22);
+
+    background:
+        rgba(255,50,90,.065);
+}
+
+/* DEFAULT LOGIN */
+
+.default-info{
+    margin-top:17px;
+
+    padding:13px 14px;
+
+    border-radius:14px;
+
+    background:
+        rgba(0,234,255,.025);
+
+    border:
+        1px solid
+        rgba(0,234,255,.075);
+
+    text-align:center;
+}
+
+.default-info .title{
+    color:#52627c;
+
+    font-size:8px;
+
+    letter-spacing:1.2px;
+
+    font-weight:800;
+
+    margin-bottom:7px;
+}
+
+.default-info .value{
+    color:#9eabc0;
+
+    font-size:10px;
+}
+
+.default-info strong{
+    color:#00eaff;
+
+    font-weight:900;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:22px;
+
+    padding-top:17px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.055);
+
+    text-align:center;
+
+    color:#46546b;
+
+    font-size:9px;
+
+    letter-spacing:.5px;
+}
+
+.footer span{
+    color:#00d9ff;
+
+    font-weight:900;
+}
+
+/* MOBILE */
+
+@media(max-width:420px){
+
+    .card{
+        padding:
+            27px
+            18px
+            20px;
+
+        border-radius:26px;
+    }
+
+    .logo-wrap{
+        width:95px;
+        height:95px;
+
+        border-radius:23px;
+    }
+
+    .brand h1{
+        font-size:27px;
+    }
+
+    .brand p{
+        font-size:8px;
+    }
+
+    input{
+        height:51px;
+    }
+
+    .btn{
+        height:52px;
+    }
+}
+
+@media(max-width:350px){
+
+    body{
+        padding:10px;
+    }
+
+    .logo-wrap{
+        width:82px;
+        height:82px;
+    }
+
+    .brand h1{
+        font-size:24px;
+    }
+
+    .status{
+        margin-top:14px;
+    }
+
+    .form{
+        margin-top:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-wrap">
+
+    <div class="glow"></div>
+    <div class="glow2"></div>
+
+    <div class="card">
+
+        <div class="brand">
+
+            <!-- NIKAN DEV PANEL LOGO -->
+            <div class="logo-wrap">
+                <img
+                    src="/static/nikan-logo.jpg"
+                    alt="Nikan Dev Panel Logo"
+                >
+            </div>
+
+            <h1>Nikan Dev Panel</h1>
+
+            <p>
+                NEON VLESS MANAGEMENT PANEL
+            </p>
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                SYSTEM ONLINE
+
+            </div>
+
+        </div>
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+        <form
+            method="POST"
+            class="form"
+        >
+
+            <div class="group">
+
+                <label>
+                    USERNAME
+                </label>
+
+                <div class="input-wrap">
+
+                    <span class="input-icon">
+                        ◈
+                    </span>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter username"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="group">
+
+                <label>
+                    PASSWORD
+                </label>
+
+                <div class="input-wrap">
+
+                    <span class="input-icon">
+                        ◆
+                    </span>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                ACCESS PANEL
+            </button>
+
+        </form>
+
+        <div class="default-info">
+
+            <div class="title">
+                DEFAULT LOGIN CREDENTIALS
+            </div>
+
+            <div class="value">
+
+                Username:
+                <strong>admin</strong>
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                Password:
+                <strong>admin</strong>
+
+            </div>
+
+        </div>
+
+        <div class="footer">
+
+            SECURED BY
+
+            <span>
+                Nikan Dev Panel
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Runtime / local state
+users.db
+panel_settings.json
+nginx.conf
+xray_config.json
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

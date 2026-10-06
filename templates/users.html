@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nikan Dev Panel | Users Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+:root{
+    --bg:#020712;--panel:#071525;--line:rgba(0,174,255,.18);
+    --blue:#009dff;--cyan:#00d9ff;--text:#f3f8ff;--muted:#7890a8;
+    --green:#00e89a;--red:#ff4567;--orange:#ffa500;--purple:#a855f7;--gold:#ffd700;
+    --shadow:0 0 35px rgba(0,157,255,.10);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;}
+
+body{background:radial-gradient(circle at 10% 10%,rgba(0,157,255,.12),transparent 28%),radial-gradient(circle at 90% 90%,rgba(0,217,255,.08),transparent 30%),var(--bg);color:var(--text);overflow-x:hidden;}
+
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,157,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,157,255,.025) 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to bottom,black,transparent);}
+
+body.rtl,body.rtl *{font-family:Vazirmatn,Inter,Arial,sans-serif;}
+button,input,select{font:inherit;}
+button{cursor:pointer;}
+
+.app{display:flex;min-height:100vh;}
+
+.sidebar{width:245px;flex-shrink:0;background:rgba(3,12,24,.94);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;backdrop-filter:blur(20px);box-shadow:8px 0 35px rgba(0,0,0,.18);}
+.rtl .sidebar{left:auto;right:0;border-right:0;border-left:1px solid var(--line);box-shadow:-8px 0 35px rgba(0,0,0,.18);}
+
+.brand{display:flex;align-items:center;gap:11px;padding:5px 8px 25px;border-bottom:1px solid rgba(0,157,255,.12);margin-bottom:20px;}
+.brand-logo{width:44px;height:44px;object-fit:cover;border-radius:12px;flex-shrink:0;border:1px solid rgba(0,217,255,.28);box-shadow:0 0 12px rgba(0,157,255,.35),0 0 25px rgba(0,157,255,.12);}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 8px rgba(0,157,255,.8),0 0 18px rgba(0,157,255,.45);}
+.brand-sub{color:#00bfff;font-size:9px;margin-top:4px;letter-spacing:1.5px;}
+
+.nav-title{color:#405d78;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:0 10px 8px;}
+.nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:12px;margin-bottom:5px;border-radius:11px;color:#7890a8;text-decoration:none;font-size:12px;font-weight:600;border:1px solid transparent;transition:.2s;}
+.nav-item:hover,.nav-item.active{color:#fff;background:linear-gradient(90deg,rgba(0,157,255,.18),rgba(0,157,255,.04));border-color:rgba(0,157,255,.18);box-shadow:inset 3px 0 0 var(--blue);}
+.rtl .nav-item:hover,.rtl .nav-item.active{background:linear-gradient(270deg,rgba(0,157,255,.18),rgba(0,157,255,.04));box-shadow:inset -3px 0 0 var(--blue);}
+.nav-icon{width:22px;text-align:center;font-size:14px;line-height:1;color:#5d7892;}
+.nav-item:hover .nav-icon,.nav-item.active .nav-icon{color:#00c8ff;}
+
+.sidebar-bottom{margin-top:auto;border-top:1px solid rgba(0,157,255,.12);padding-top:14px;}
+.developer-box{background:rgba(0,157,255,.05);border:1px solid rgba(0,157,255,.12);border-radius:13px;padding:12px;margin-bottom:12px;}
+.developer-box small{color:#55718c;font-size:8px;}
+.developer-box strong{display:block;color:#00c8ff;font-size:11px;margin-top:4px;}
+.logout{color:#ff5877;}
+
+.main{width:calc(100% - 245px);margin-left:245px;padding:22px;min-width:0;}
+.rtl .main{margin-left:0;margin-right:245px;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px;}
+.mobile-menu{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;color:#fff;background:var(--panel);font-size:23px;line-height:1;}
+
+.page-title h1{font-size:24px;font-weight:900;letter-spacing:-.5px;}
+.page-title p{color:var(--muted);font-size:11px;margin-top:5px;}
+
+.top-actions{display:flex;align-items:center;gap:10px;}
+.language-btn{min-width:68px;height:38px;padding:0 12px;border-radius:10px;border:1px solid rgba(0,157,255,.25);background:rgba(0,157,255,.07);color:#00c8ff;font-size:10px;font-weight:800;transition:.2s;}
+.language-btn:hover{background:rgba(0,157,255,.15);border-color:rgba(0,217,255,.45);box-shadow:0 0 15px rgba(0,157,255,.15);}
+
+.profile{display:flex;align-items:center;gap:10px;}
+.profile-info{text-align:right;}
+.rtl .profile-info{text-align:left;}
+.profile-info strong{display:block;font-size:11px;}
+.profile-info span{color:#00d99a;font-size:9px;}
+.avatar{width:40px;height:40px;border-radius:12px;overflow:hidden;border:1px solid rgba(0,217,255,.25);box-shadow:0 0 18px rgba(0,157,255,.3);}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+
+.card{background:linear-gradient(145deg,rgba(9,28,48,.90),rgba(3,14,27,.92));border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.card:after{content:"";position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,#00c8ff,transparent);opacity:.5;}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:15px;}
+.stat{padding:18px;min-width:0;}
+.stat-top{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.stat-label{color:#7690a9;font-size:10px;font-weight:600;}
+.stat-icon{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(0,157,255,.11);border:1px solid rgba(0,157,255,.15);color:#00c8ff;font-size:9px;letter-spacing:1px;font-weight:800;}
+.stat-icon.green{background:rgba(0,232,154,.11);border-color:rgba(0,232,154,.22);color:#00e89a;}
+.stat-icon.red{background:rgba(255,69,103,.11);border-color:rgba(255,69,103,.22);color:#ff5877;}
+.stat-icon.orange{background:rgba(255,165,0,.11);border-color:rgba(255,165,0,.22);color:#ffa500;}
+.stat-value{font-size:25px;font-weight:900;margin-top:12px;}
+.stat-change{color:#00db9a;font-size:9px;margin-top:5px;}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.85);}}
+
+.online-card{padding:22px;margin-bottom:15px;position:relative;}
+.online-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.online-head-left{display:flex;align-items:center;gap:12px;}
+.online-head h2{font-size:14px;font-weight:800;display:flex;align-items:center;gap:9px;}
+.live-dot{width:9px;height:9px;background:#00e89a;border-radius:50%;box-shadow:0 0 10px #00e89a;animation:pulse 1.5s infinite;flex-shrink:0;}
+.online-count-badge{background:linear-gradient(135deg,rgba(0,232,154,.15),rgba(0,217,255,.1));border:1px solid rgba(0,232,154,.3);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:900;color:#00e89a;display:inline-flex;align-items:center;gap:6px;}
+.online-count-badge .num{font-size:14px;}
+.online-head-right{color:#506d88;font-size:9px;font-weight:600;letter-spacing:.5px;}
+.online-list{display:flex;flex-wrap:wrap;gap:8px;}
+.online-user{background:rgba(0,232,154,.06);border:1px solid rgba(0,232,154,.2);border-radius:10px;padding:9px 13px;display:flex;align-items:center;gap:8px;font-size:10px;color:#c1e5d2;transition:.2s;}
+.online-user:hover{background:rgba(0,232,154,.1);border-color:rgba(0,232,154,.4);transform:translateY(-1px);}
+.online-user .mini-dot{width:7px;height:7px;background:#00e89a;border-radius:50%;box-shadow:0 0 6px #00e89a;flex-shrink:0;animation:pulse 1.5s infinite;}
+.online-user b{color:#fff;font-weight:800;}
+.online-user .sep{color:#4e6b84;}
+.online-user .usage{color:#8ba3ba;}
+.online-user small{color:#5a8575;font-size:8px;background:rgba(0,232,154,.1);padding:2px 7px;border-radius:5px;font-weight:700;}
+.online-empty{color:#4e6b84;font-size:11px;text-align:center;padding:20px;width:100%;}
+.online-empty-icon{font-size:28px;opacity:.3;margin-bottom:8px;}
+
+.toolbar{padding:16px 18px;margin-bottom:15px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;}
+.toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:0;}
+.search-box{flex:1;min-width:180px;max-width:280px;background:#020b16;color:#fff;border:1px solid #17344e;border-radius:10px;padding:10px 12px;outline:none;font-size:11px;}
+.search-box:focus{border-color:#00aaff;box-shadow:0 0 12px rgba(0,157,255,.12);}
+
+.filter-tabs{display:flex;gap:5px;flex-wrap:wrap;}
+.filter-tab{padding:8px 12px;border-radius:9px;background:rgba(0,157,255,.05);border:1px solid rgba(0,157,255,.12);color:#7890a8;font-size:9px;font-weight:800;letter-spacing:.5px;transition:.2s;}
+.filter-tab:hover{color:#fff;}
+.filter-tab.active{background:linear-gradient(135deg,#007cff,#00bfff);color:#fff;border-color:transparent;box-shadow:0 0 14px rgba(0,157,255,.25);}
+
+.btn-add{padding:10px 16px;border-radius:10px;border:0;background:linear-gradient(135deg,#007cff,#00bfff);color:#fff;font-size:11px;font-weight:800;box-shadow:0 0 14px rgba(0,157,255,.25);display:flex;align-items:center;gap:6px;}
+.btn-add:hover{box-shadow:0 0 22px rgba(0,157,255,.45);}
+
+.users-card{padding:16px;}
+.user-row{display:grid;grid-template-columns:1.3fr 1.5fr .6fr .7fr auto;align-items:center;gap:14px;padding:14px;border-radius:12px;background:rgba(2,11,22,.55);border:1px solid rgba(0,157,255,.08);transition:.2s;margin-bottom:8px;}
+.user-row:hover{border-color:rgba(0,157,255,.25);background:rgba(0,157,255,.04);}
+
+.user-info{display:flex;align-items:center;gap:10px;min-width:0;}
+.user-avatar{width:34px;height:34px;flex-shrink:0;border-radius:9px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,157,255,.2),rgba(0,217,255,.1));border:1px solid rgba(0,217,255,.25);color:#00d9ff;font-size:10px;font-weight:900;letter-spacing:1px;position:relative;}
+.user-avatar.online:after{content:"";position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;background:#00e89a;border:2px solid #061322;border-radius:50%;box-shadow:0 0 6px #00e89a;}
+.user-meta{min-width:0;}
+.user-meta strong{display:block;font-size:12px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.user-meta small{color:#4e6b84;display:block;font-size:9px;margin-top:3px;}
+
+.user-traffic{min-width:0;}
+.traffic-text{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:9px;color:#8ba3ba;}
+.traffic-text b{color:#e9f4ff;font-weight:700;}
+.traffic-text .pct{color:#00c8ff;font-weight:800;}
+.traffic-progress{width:100%;height:6px;background:rgba(0,157,255,.08);border-radius:4px;overflow:hidden;}
+.traffic-progress-bar{height:100%;background:linear-gradient(90deg,#007cff,#00d9ff);border-radius:4px;transition:width .3s;box-shadow:0 0 8px rgba(0,157,255,.4);}
+.traffic-progress-bar.warning{background:linear-gradient(90deg,#ff8c00,#ffd700);box-shadow:0 0 8px rgba(255,165,0,.4);}
+.traffic-progress-bar.danger{background:linear-gradient(90deg,#ff4567,#ff8ba0);box-shadow:0 0 8px rgba(255,69,103,.4);}
+
+.user-days{text-align:center;}
+.user-days strong{display:block;font-size:16px;font-weight:900;}
+.user-days small{color:#4e6b84;font-size:8px;display:block;margin-top:2px;}
+.days-ok{color:#00e89a;}.days-warning{color:#ffa500;}.days-danger{color:#ff4567;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;font-size:8px;font-weight:800;letter-spacing:.5px;white-space:nowrap;}
+.badge.active{color:#00e89a;background:rgba(0,232,154,.08);border:1px solid rgba(0,232,154,.14);}
+.badge.off{color:#ff5274;background:rgba(255,69,103,.08);border:1px solid rgba(255,69,103,.14);}
+.badge.expired{color:#ffa500;background:rgba(255,165,0,.08);border:1px solid rgba(255,165,0,.14);}
+
+.actions{display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;}
+.btn{border:0;border-radius:8px;padding:7px 10px;font-size:9px;font-weight:800;color:#fff;transition:.2s;white-space:nowrap;}
+.btn:active{transform:scale(.95);}
+.btn-blue{background:linear-gradient(135deg,#007cff,#00bfff);box-shadow:0 0 14px rgba(0,157,255,.2);}
+.btn-dark{background:#0b1a2b;border:1px solid #17344e;color:#9db4c9;}
+.btn-red{background:rgba(255,69,103,.1);border:1px solid rgba(255,69,103,.18);color:#ff617e;}
+.btn-green{background:rgba(0,232,154,.08);border:1px solid rgba(0,232,154,.15);color:#00e89a;}
+.btn-orange{background:rgba(255,165,0,.08);border:1px solid rgba(255,165,0,.18);color:#ffa500;}
+
+.empty{padding:60px 20px;text-align:center;color:#557089;}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.4;}
+.empty h3{font-size:13px;margin-bottom:5px;color:#7890a8;}
+.empty p{font-size:10px;}
+
+.overlay{position:fixed;inset:0;background:rgba(0,4,10,.82);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:15px;z-index:500;}
+.overlay.show{display:flex;}
+.modal{width:100%;max-width:520px;max-height:92vh;overflow:auto;background:#061322;border:1px solid rgba(0,157,255,.3);border-radius:20px;box-shadow:0 0 50px rgba(0,157,255,.15),0 25px 70px rgba(0,0,0,.7);padding:20px;}
+.modal.wide{max-width:600px;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:13px;border-bottom:1px solid rgba(0,157,255,.1);}
+.modal-head h3{font-size:14px;}
+.modal-head .modal-sub{color:#5a7a94;font-size:9px;margin-top:3px;}
+.close{width:30px;height:30px;border:1px solid #18344c;background:#091a2c;color:#829bb1;border-radius:8px;font-size:16px;}
+
+.form-group{margin-bottom:14px;}
+.form-group label{display:flex;justify-content:space-between;align-items:center;color:#7e98b0;font-size:9px;margin-bottom:6px;font-weight:700;letter-spacing:.5px;}
+.form-group label .label-hint{color:#4e6b84;font-size:8px;font-weight:600;letter-spacing:0;}
+.input{width:100%;background:#020b16;color:#fff;border:1px solid #17344e;border-radius:10px;padding:11px 12px;outline:none;font-size:11px;}
+.input:focus{border-color:#00aaff;box-shadow:0 0 12px rgba(0,157,255,.12);}
+
+.input-with-btn{display:flex;gap:5px;}
+.input-with-btn .input{flex:1;min-width:0;}
+.input-icon-btn{width:42px;flex-shrink:0;background:linear-gradient(135deg,rgba(0,157,255,.15),rgba(0,217,255,.08));border:1px solid rgba(0,157,255,.25);color:#00c8ff;border-radius:10px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.input-icon-btn:hover{background:linear-gradient(135deg,rgba(0,157,255,.25),rgba(0,217,255,.15));border-color:rgba(0,217,255,.5);box-shadow:0 0 10px rgba(0,157,255,.3);}
+
+/* QUICK PLANS */
+.plans-title{font-size:9px;font-weight:800;color:#7e98b0;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.plans-title .star{color:#ffd700;}
+.quick-plans{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px;}
+.plan-card{background:rgba(0,157,255,.05);border:1px solid rgba(0,157,255,.12);border-radius:10px;padding:9px 5px;text-align:center;cursor:pointer;transition:.2s;position:relative;overflow:hidden;}
+.plan-card:hover{background:rgba(0,157,255,.1);transform:translateY(-2px);}
+.plan-card.active{background:linear-gradient(135deg,rgba(0,157,255,.2),rgba(0,217,255,.1));border-color:rgba(0,217,255,.4);box-shadow:0 0 15px rgba(0,157,255,.25);}
+.plan-icon{font-size:16px;margin-bottom:3px;}
+.plan-name{font-size:8px;font-weight:800;color:#fff;letter-spacing:.3px;}
+.plan-info{font-size:7px;color:#6a8aa5;margin-top:2px;font-weight:600;}
+.plan-card.bronze .plan-name{color:#cd7f32;}
+.plan-card.silver .plan-name{color:#c0c0c0;}
+.plan-card.gold .plan-name{color:#ffd700;}
+.plan-card.diamond .plan-name{color:#00d9ff;}
+.plan-card.vip .plan-name{color:#a855f7;}
+
+/* SLIDER */
+.slider-row{display:flex;align-items:center;gap:10px;margin-top:7px;}
+.slider-input{flex:1;height:5px;background:#0b1a2b;border-radius:3px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;}
+.slider-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;background:linear-gradient(135deg,#007cff,#00bfff);border-radius:50%;cursor:pointer;box-shadow:0 0 8px rgba(0,157,255,.5);}
+.slider-input::-moz-range-thumb{width:16px;height:16px;background:linear-gradient(135deg,#007cff,#00bfff);border-radius:50%;cursor:pointer;border:0;box-shadow:0 0 8px rgba(0,157,255,.5);}
+.slider-value{min-width:50px;text-align:center;background:#020b16;border:1px solid #17344e;border-radius:7px;padding:5px 8px;font-size:10px;font-weight:800;color:#00c8ff;}
+
+.presets{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;}
+.preset{flex:1;min-width:50px;padding:7px 8px;background:rgba(0,157,255,.06);border:1px solid rgba(0,157,255,.15);border-radius:8px;color:#8bacc5;font-size:9px;font-weight:700;transition:.2s;}
+.preset:hover{background:rgba(0,157,255,.15);color:#fff;}
+.preset.active{background:linear-gradient(135deg,#007cff,#00bfff);color:#fff;border-color:transparent;}
+.preset.special{background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3);color:#c084fc;}
+.preset.special:hover{background:rgba(168,85,247,.2);}
+
+/* SUMMARY CARD */
+.summary{margin-top:16px;background:linear-gradient(135deg,rgba(0,157,255,.08),rgba(0,232,154,.04));border:1px solid rgba(0,217,255,.2);border-radius:12px;padding:14px;}
+.summary-title{font-size:9px;font-weight:800;color:#00c8ff;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.summary-item{background:rgba(0,0,0,.25);border:1px solid rgba(0,157,255,.08);border-radius:9px;padding:9px 10px;}
+.summary-item .lbl{font-size:8px;color:#5a7a94;font-weight:700;letter-spacing:.3px;}
+.summary-item .val{font-size:12px;color:#fff;font-weight:800;margin-top:3px;display:flex;align-items:center;gap:4px;}
+.summary-item .val small{font-size:8px;color:#8bacc5;font-weight:600;}
+
+.config-box{background:#020b16;border:1px solid #12304a;border-radius:12px;padding:11px;margin-bottom:8px;}
+.config-top{display:flex;justify-content:space-between;gap:10px;align-items:center;}
+.config-title{font-size:10px;font-weight:800;}
+.config-desc{color:#536f88;font-size:8px;margin-top:4px;}
+.config-actions{display:flex;gap:5px;flex-shrink:0;}
+
+.sub-box{padding:12px;background:rgba(0,157,255,.045);border:1px solid rgba(0,157,255,.12);border-radius:12px;margin-bottom:13px;}
+.sub-box label{display:block;color:#66829b;font-size:8px;margin-bottom:6px;font-weight:700;}
+.sub-row{display:flex;gap:5px;}
+.sub-row input{min-width:0;}
+
+.confirm-text{font-size:12px;color:#c1d5e8;line-height:1.7;text-align:center;padding:10px 0 20px;}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,100px);background:#061a2b;color:#fff;border:1px solid #007fca;border-radius:12px;padding:11px 18px;font-size:10px;font-weight:700;box-shadow:0 0 25px rgba(0,157,255,.25);z-index:999;transition:.3s;}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{border-color:#ff4567;box-shadow:0 0 25px rgba(255,69,103,.25);}
+.toast.success{border-color:#00e89a;box-shadow:0 0 25px rgba(0,232,154,.25);}
+
+@media(max-width:980px){.user-row{grid-template-columns:1fr 1fr;gap:12px;}.user-days{text-align:left;}.actions{grid-column:1 / -1;justify-content:stretch;}.actions .btn{flex:1;}}
+@media(max-width:900px){
+    .sidebar{transform:translateX(-105%);transition:.3s;box-shadow:10px 0 40px rgba(0,0,0,.6);}
+    .rtl .sidebar{transform:translateX(105%);box-shadow:-10px 0 40px rgba(0,0,0,.6);}
+    .sidebar.open,.rtl .sidebar.open{transform:translateX(0);}
+    .main{width:100%;margin-left:0;margin-right:0;padding:14px;}
+    .rtl .main{margin-left:0;margin-right:0;}
+    .mobile-menu{display:flex;align-items:center;justify-content:center;}
+    .page-title h1{font-size:20px;}
+    .page-title p{font-size:9px;}
+    .profile-info{display:none;}
+    .stats{grid-template-columns:repeat(2,1fr);gap:9px;}
+    .stat{padding:14px;}
+    .stat-value{font-size:21px;}
+}
+@media(max-width:600px){
+    .user-row{grid-template-columns:1fr;}
+    .user-days{text-align:left;}
+    .quick-plans{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:480px){
+    .main{padding:10px;}
+    .stats{grid-template-columns:1fr 1fr;}
+    .stat-label{font-size:8px;}
+    .stat-value{font-size:18px;}
+    .modal{padding:15px;border-radius:16px;}
+    .language-btn{min-width:58px;padding:0 8px;font-size:9px;}
+    .search-box{max-width:100%;}
+    .toolbar{padding:12px;}
+    .online-card{padding:16px;}
+    .online-user{font-size:9px;padding:7px 10px;}
+    .quick-plans{grid-template-columns:repeat(2,1fr);}
+    .summary-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+    <div>
+        <div class="brand">
+            <img src="/static/nikan-logo.jpg" alt="Nikan Dev Panel" class="brand-logo">
+            <div>
+                <div class="brand-name">Nikan Dev Panel</div>
+                <div class="brand-sub" data-i18n="vpnControlPanel">VPN CONTROL PANEL</div>
+            </div>
+        </div>
+
+        <div class="nav-title" style="font-size:18px;letter-spacing:0;padding:0 10px 10px;color:#00bfff;">☰</div>
+
+        <a href="/dashboard" class="nav-item">
+            <span class="nav-icon">⌂</span>
+            <span data-i18n="dashboard">Dashboard</span>
+        </a>
+
+        <a href="/users" class="nav-item active">
+            <span class="nav-icon">◉</span>
+            <span data-i18n="manageUsers">Manage Users</span>
+        </a>
+
+        <a href="/settings" class="nav-item">
+            <span class="nav-icon">⚙</span>
+            <span data-i18n="panelSettings">Panel Settings</span>
+        </a>
+
+        <div class="nav-title" style="margin-top:18px;" data-i18n="community">COMMUNITY</div>
+
+        <a href="https://t.me/NeuralDevvv" target="_blank" class="nav-item">
+            <span class="nav-icon">➤</span>
+            <span data-i18n="joinTelegram">Join Telegram</span>
+        </a>
+
+        <a href="https://t.me/NeuralDevvv" target="_blank" class="nav-item">
+            <span class="nav-icon">◇</span>
+            <span data-i18n="supportDeveloper">Support Developer</span>
+        </a>
+    </div>
+
+    <div class="sidebar-bottom">
+        <div class="developer-box">
+            <small data-i18n="designedDeveloped">DESIGNED & DEVELOPED BY</small>
+            <strong>Nikan Dev Panel</strong>
+        </div>
+
+        <a href="/logout" class="nav-item logout">
+            <span class="nav-icon">↪</span>
+            <span data-i18n="logout">Logout</span>
+        </a>
+    </div>
+</aside>
+
+<main class="main">
+
+    <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px;">
+            <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+            <div class="page-title">
+                <h1 data-i18n="usersManagement">Users Management</h1>
+                <p data-i18n="usersSub">Manage all your VPN users and configurations</p>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <button class="language-btn" id="languageBtn" onclick="toggleLanguage()">فارسی</button>
+            <div class="profile">
+                <div class="profile-info">
+                    <strong data-i18n="administrator">Administrator</strong>
+                    <span data-i18n="online">ONLINE</span>
+                </div>
+                <div class="avatar">
+                    <img src="/static/nikan-logo.jpg" alt="Administrator">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="stats">
+        <div class="card stat">
+            <div class="stat-top">
+                <span class="stat-label" data-i18n="totalUsers">TOTAL USERS</span>
+                <span class="stat-icon">ALL</span>
+            </div>
+            <div class="stat-value">{{ total_users }}</div>
+            <div class="stat-change" data-i18n="allAccounts">ALL ACCOUNTS</div>
+        </div>
+
+        <div class="card stat">
+            <div class="stat-top">
+                <span class="stat-label" data-i18n="activeUsers">ACTIVE</span>
+                <span class="stat-icon green">ON</span>
+            </div>
+            <div class="stat-value" style="color:#00e89a;">{{ active_users }}</div>
+            <div class="stat-change" data-i18n="currentlyActive">CURRENTLY ACTIVE</div>
+        </div>
+
+        <div class="card stat">
+            <div class="stat-top">
+                <span class="stat-label" data-i18n="disabledUsers">DISABLED</span>
+                <span class="stat-icon red">OFF</span>
+            </div>
+            <div class="stat-value" style="color:#ff5877;">{{ disabled_users }}</div>
+            <div class="stat-change" style="color:#ff5877;" data-i18n="turnedOff">TURNED OFF</div>
+        </div>
+
+        <div class="card stat">
+            <div class="stat-top">
+                <span class="stat-label" data-i18n="usedTraffic">USED TRAFFIC</span>
+                <span class="stat-icon orange">GB</span>
+            </div>
+            <div class="stat-value" style="color:#ffa500;">
+                {{ total_used }}
+                <small style="font-size:11px;color:#66839c;">GB</small>
+            </div>
+            <div class="stat-change" style="color:#ffa500;" data-i18n="totalConsumption">TOTAL CONSUMPTION</div>
+        </div>
+    </section>
+
+    <section class="card online-card">
+        <div class="online-head">
+            <div class="online-head-left">
+                <h2>
+                    <span class="live-dot"></span>
+                    <span data-i18n="onlineUsersTitle">Online Users</span>
+                </h2>
+                <span class="online-count-badge">
+                    <span class="num" id="onlineCount">{{ online_users }}</span>
+                    <span data-i18n="onlineLive">LIVE</span>
+                </span>
+            </div>
+            <div class="online-head-right" data-i18n="autoRefresh">AUTO-REFRESH 15s</div>
+        </div>
+
+        <div id="onlineList" class="online-list">
+            <div class="online-empty">
+                <div class="online-empty-icon">⏳</div>
+                <div data-i18n="loading">Loading...</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card toolbar">
+        <div class="toolbar-left">
+            <input type="text" id="searchInput" oninput="filterUsers()" placeholder="🔍 Search by username..." class="search-box" data-i18n-ph="searchPlaceholder">
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all" onclick="setFilter('all')" data-i18n="filterAll">ALL</button>
+                <button class="filter-tab" data-filter="active" onclick="setFilter('active')" data-i18n="filterActive">ACTIVE</button>
+                <button class="filter-tab" data-filter="disabled" onclick="setFilter('disabled')" data-i18n="filterDisabled">DISABLED</button>
+                <button class="filter-tab" data-filter="expired" onclick="setFilter('expired')" data-i18n="filterExpired">EXPIRED</button>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="openAddModal()">
+            <span style="font-size:14px;">+</span>
+            <span data-i18n="createUser">Create User</span>
+        </button>
+    </section>
+
+    <section class="card users-card">
+        <div class="user-list" id="userList">
+
+        {% if users %}
+            {% for user in users %}
+            <div class="user-row"
+                data-status="{{ 'expired' if user.is_expired else ('active' if user.enabled == 1 else 'disabled') }}"
+                data-name="{{ user.name|lower }}">
+
+                <div class="user-info">
+                    <div class="user-avatar {% if user.is_online %}online{% endif %}" data-user="{{ user.name }}">{{ user.name[:2]|upper }}</div>
+                    <div class="user-meta">
+                        <strong>{{ user.name }}</strong>
+                        <small>ID #{{ user.id }} · {{ user.created_date }}</small>
+                    </div>
+                </div>
+
+                <div class="user-traffic">
+                    <div class="traffic-text">
+                        <span><b>{{ user.used_gb }}</b> / {{ user.quota_gb }} GB</span>
+                        <span class="pct">{{ user.percent }}%</span>
+                    </div>
+                    <div class="traffic-progress">
+                        <div class="traffic-progress-bar {% if user.percent >= 90 %}danger{% elif user.percent >= 70 %}warning{% endif %}" style="width:{{ user.percent }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="user-days">
+                    <strong class="{% if user.days_left <= 3 %}days-danger{% elif user.days_left <= 7 %}days-warning{% else %}days-ok{% endif %}">{{ user.days_left }}</strong>
+                    <small data-i18n="daysLeft">days left</small>
+                </div>
+
+                <div style="display:flex;justify-content:center;">
+                    {% if user.is_expired %}
+                        <span class="badge expired" data-i18n="expired">EXPIRED</span>
+                    {% elif user.enabled == 1 %}
+                        <span class="badge active" data-i18n="active">ACTIVE</span>
+                    {% else %}
+                        <span class="badge off" data-i18n="disabled">DISABLED</span>
+                    {% endif %}
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-blue" onclick="loadUserConfig({{ user.id }})" data-i18n="config">Config</button>
+                    <button class="btn btn-green" onclick="openEdit({{ user.id }}, '{{ user.name|e }}', {{ user.quota_gb }}, {{ user.expire_days }})" data-i18n="edit">Edit</button>
+                    <button class="btn btn-orange" onclick="confirmReset({{ user.id }})" data-i18n="reset">Reset</button>
+                    <button class="btn btn-dark" onclick="toggleUser({{ user.id }})">
+                        {% if user.enabled == 1 %}<span data-i18n="off">Off</span>{% else %}<span data-i18n="on">On</span>{% endif %}
+                    </button>
+                    <button class="btn btn-red" onclick="confirmDelete({{ user.id }})" data-i18n="delete">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty" id="emptyState">
+                <div class="empty-icon">👥</div>
+                <h3 data-i18n="noUsers">NO USERS YET</h3>
+                <p data-i18n="noUsersDesc">Click "Create User" to add your first VPN account</p>
+            </div>
+        {% endif %}
+
+        </div>
+
+        <div class="empty" id="noResults" style="display:none;">
+            <div class="empty-icon">🔍</div>
+            <h3 data-i18n="noResults">NO RESULTS FOUND</h3>
+            <p data-i18n="noResultsDesc">Try changing your search or filter</p>
+        </div>
+    </section>
+
+</main>
+
+</div>
+
+<!-- ADD USER MODAL - SHLOGH O POLOGH EDITION 😎 -->
+<div class="overlay" id="addModal">
+    <div class="modal wide">
+        <div class="modal-head">
+            <div>
+                <h3 data-i18n="createNewUser">Create New User</h3>
+                <div class="modal-sub" data-i18n="createNewUserSub">Build a VPN account in seconds</div>
+            </div>
+            <button class="close" onclick="closeModal('addModal')">×</button>
+        </div>
+
+        <form onsubmit="submitAddUser(event)">
+
+            <!-- QUICK PLANS -->
+            <div class="plans-title">
+                <span class="star">✦</span>
+                <span data-i18n="quickPlans">QUICK PLANS</span>
+                <span style="margin-left:auto;color:#4e6b84;font-weight:600;letter-spacing:0;" data-i18n="quickPlansHint">one click to fill</span>
+            </div>
+            <div class="quick-plans">
+                <div class="plan-card bronze" onclick="applyPlan(this, 10, 7)">
+                    <div class="plan-icon">🥉</div>
+                    <div class="plan-name" data-i18n="planBronze">BRONZE</div>
+                    <div class="plan-info">10GB · 7D</div>
+                </div>
+                <div class="plan-card silver" onclick="applyPlan(this, 30, 30)">
+                    <div class="plan-icon">🥈</div>
+                    <div class="plan-name" data-i18n="planSilver">SILVER</div>
+                    <div class="plan-info">30GB · 30D</div>
+                </div>
+                <div class="plan-card gold" onclick="applyPlan(this, 60, 60)">
+                    <div class="plan-icon">🥇</div>
+                    <div class="plan-name" data-i18n="planGold">GOLD</div>
+                    <div class="plan-info">60GB · 60D</div>
+                </div>
+                <div class="plan-card diamond" onclick="applyPlan(this, 150, 90)">
+                    <div class="plan-icon">💎</div>
+                    <div class="plan-name" data-i18n="planDiamond">DIAMOND</div>
+                    <div class="plan-info">150GB · 90D</div>
+                </div>
+                <div class="plan-card vip" onclick="applyPlan(this, 500, 365)">
+                    <div class="plan-icon">👑</div>
+                    <div class="plan-name" data-i18n="planVip">VIP</div>
+                    <div class="plan-info">500GB · 1Y</div>
+                </div>
+            </div>
+
+            <!-- USERNAME -->
+            <div class="form-group">
+                <label>
+                    <span data-i18n="username">USERNAME</span>
+                    <span class="label-hint"><span id="nameCount">0</span>/20</span>
+                </label>
+                <div class="input-with-btn">
+                    <input id="add_name" class="input" type="text" placeholder="example: user01" maxlength="20" oninput="updateNameCount()" required>
+                    <button type="button" class="input-icon-btn" onclick="generateRandomName()" title="Generate random username">🎲</button>
+                </div>
+            </div>
+
+            <!-- QUOTA -->
+            <div class="form-group">
+                <label>
+                    <span data-i18n="trafficQuota">TRAFFIC QUOTA (GB)</span>
+                    <span class="label-hint" id="quotaHint">—</span>
+                </label>
+                <input id="add_quota" class="input" type="number" value="30" min="1" max="2000" required oninput="syncSlider('quota')">
+                <div class="slider-row">
+                    <input type="range" id="add_quota_slider" class="slider-input" min="1" max="500" value="30" oninput="syncInput('quota')">
+                    <div class="slider-value" id="add_quota_display">30 GB</div>
+                </div>
+                <div class="presets">
+                    <button type="button" class="preset" onclick="setValue('add_quota', 10, this)">10</button>
+                    <button type="button" class="preset active" onclick="setValue('add_quota', 30, this)">30</button>
+                    <button type="button" class="preset" onclick="setValue('add_quota', 50, this)">50</button>
+                    <button type="button" class="preset" onclick="setValue('add_quota', 100, this)">100</button>
+                    <button type="button" class="preset" onclick="setValue('add_quota', 200, this)">200</button>
+                    <button type="button" class="preset special" onclick="setValue('add_quota', 500, this)">500</button>
+                </div>
+            </div>
+
+            <!-- DAYS -->
+            <div class="form-group">
+                <label>
+                    <span data-i18n="validity">VALIDITY (DAYS)</span>
+                    <span class="label-hint" id="daysHint">—</span>
+                </label>
+                <input id="add_days" class="input" type="number" value="30" min="1" max="730" required oninput="syncSlider('days')">
+                <div class="slider-row">
+                    <input type="range" id="add_days_slider" class="slider-input" min="1" max="365" value="30" oninput="syncInput('days')">
+                    <div class="slider-value" id="add_days_display">30 D</div>
+                </div>
+                <div class="presets">
+                    <button type="button" class="preset" onclick="setValue('add_days', 7, this)">7</button>
+                    <button type="button" class="preset active" onclick="setValue('add_days', 30, this)">30</button>
+                    <button type="button" class="preset" onclick="setValue('add_days', 60, this)">60</button>
+                    <button type="button" class="preset" onclick="setValue('add_days', 90, this)">90</button>
+                    <button type="button" class="preset" onclick="setValue('add_days', 180, this)">180</button>
+                    <button type="button" class="preset special" onclick="setValue('add_days', 365, this)">365</button>
+                </div>
+            </div>
+
+            <!-- LIVE SUMMARY -->
+            <div class="summary">
+                <div class="summary-title">
+                    <span>⚡</span>
+                    <span data-i18n="orderSummary">ORDER SUMMARY</span>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="lbl" data-i18n="sumUser">👤 USER</div>
+                        <div class="val" id="sumName">—</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="lbl" data-i18n="sumQuota">📊 QUOTA</div>
+                        <div class="val"><span id="sumQuota">30</span> <small>GB</small></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="lbl" data-i18n="sumValidity">📅 VALIDITY</div>
+                        <div class="val"><span id="sumDays">30</span> <small data-i18n="sumDaysUnit">days</small></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="lbl" data-i18n="sumExpires">⏰ EXPIRES ON</div>
+                        <div class="val" id="sumExpiry" style="font-size:10px;">—</div>
+                    </div>
+                    <div class="summary-item" style="grid-column:1 / -1;">
+                        <div class="lbl" data-i18n="sumDaily">⚡ AVERAGE DAILY USAGE</div>
+                        <div class="val"><span id="sumDaily">1.00</span> <small>GB / day</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="addBtnSubmit" class="btn btn-blue" style="width:100%;padding:15px;font-size:12px;margin-top:15px;letter-spacing:1px;" data-i18n="createVpnAccount">🚀 CREATE VPN ACCOUNT</button>
+        </form>
+    </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div class="overlay" id="editModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3 data-i18n="editUser">Edit User</h3>
+            <button class="close" onclick="closeModal('editModal')">×</button>
+        </div>
+
+        <form onsubmit="submitEditUser(event)">
+            <input type="hidden" id="edit_id">
+
+            <div class="form-group">
+                <label data-i18n="username">USERNAME</label>
+                <input id="edit_name" class="input" type="text" readonly style="opacity:.6;cursor:not-allowed;">
+            </div>
+
+            <div class="form-group">
+                <label data-i18n="trafficQuota">TRAFFIC QUOTA (GB)</label>
+                <input id="edit_quota" class="input" type="number" min="1" required>
+                <div class="presets">
+                    <button type="button" class="preset" onclick="setValue('edit_quota', 10, this)">10</button>
+                    <button type="button" class="preset" onclick="setValue('edit_quota', 30, this)">30</button>
+                    <button type="button" class="preset" onclick="setValue('edit_quota', 50, this)">50</button>
+                    <button type="button" class="preset" onclick="setValue('edit_quota', 100, this)">100</button>
+                    <button type="button" class="preset" onclick="setValue('edit_quota', 200, this)">200</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label data-i18n="validity">VALIDITY (DAYS)</label>
+                <input id="edit_days" class="input" type="number" min="1" required>
+                <div class="presets">
+                    <button type="button" class="preset" onclick="setValue('edit_days', 7, this)">7</button>
+                    <button type="button" class="preset" onclick="setValue('edit_days', 30, this)">30</button>
+                    <button type="button" class="preset" onclick="setValue('edit_days', 60, this)">60</button>
+                    <button type="button" class="preset" onclick="setValue('edit_days', 90, this)">90</button>
+                    <button type="button" class="preset" onclick="setValue('edit_days', 180, this)">180</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-blue" style="width:100%;padding:14px;font-size:11px;margin-top:5px;" data-i18n="saveChanges">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="overlay" id="confirmModal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-head">
+            <h3 id="confirmTitle">Confirm</h3>
+            <button class="close" onclick="closeModal('confirmModal')">×</button>
+        </div>
+        <div class="confirm-text" id="confirmText">Are you sure?</div>
+        <div class="confirm-actions">
+            <button class="btn btn-dark" style="padding:13px;" onclick="closeModal('confirmModal')" data-i18n="cancel">Cancel</button>
+            <button class="btn btn-red" id="confirmBtn" style="padding:13px;" data-i18n="confirm">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="overlay" id="configModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3 id="cfgTitle">User Configurations</h3>
+            <button class="close" onclick="closeModal('configModal')">×</button>
+        </div>
+
+        <div class="sub-box">
+            <label data-i18n="subscriptionUrl">SUBSCRIPTION URL</label>
+            <div class="sub-row">
+                <input id="subUrlField" class="input" readonly>
+                <button onclick="copySubLink()" class="btn btn-blue" data-i18n="copy">Copy</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px;">
+                <button onclick="openSubLink()" class="btn btn-dark" data-i18n="openWebPanel">Open Web Panel</button>
+                <button onclick="copyAllConfigs()" class="btn btn-green" data-i18n="copyAll">Copy All</button>
+            </div>
+        </div>
+
+        <div id="cfgContainer"></div>
+
+        <div id="qrWrap" style="display:none;text-align:center;margin-top:12px;">
+            <div id="qrBox" style="display:inline-block;background:#fff;padding:9px;border-radius:12px;"></div>
+            <div id="qrText" style="color:#7190a9;font-size:9px;margin-top:7px;"></div>
+        </div>
+
+        <button onclick="closeModal('configModal')" class="btn btn-dark" style="width:100%;margin-top:12px;padding:12px;" data-i18n="close">Close</button>
+    </div>
+</div>
+
+<div id="toast" class="toast">System message</div>
+
+<script>
+let currentConfigs = [];
+let currentSub = '';
+let currentFilter = 'all';
+let confirmCallback = null;
+
+const translations = {
+    en:{
+        vpnControlPanel:"VPN CONTROL PANEL",dashboard:"Dashboard",manageUsers:"Manage Users",panelSettings:"Panel Settings",
+        community:"COMMUNITY",joinTelegram:"Join Telegram",supportDeveloper:"Support Developer",
+        designedDeveloped:"DESIGNED & DEVELOPED BY",logout:"Logout",usersManagement:"Users Management",
+        usersSub:"Manage all your VPN users and configurations",administrator:"Administrator",online:"ONLINE",
+        totalUsers:"TOTAL USERS",allAccounts:"ALL ACCOUNTS",activeUsers:"ACTIVE",currentlyActive:"CURRENTLY ACTIVE",
+        disabledUsers:"DISABLED",turnedOff:"TURNED OFF",usedTraffic:"USED TRAFFIC",totalConsumption:"TOTAL CONSUMPTION",
+        onlineUsersTitle:"Online Users",onlineLive:"LIVE",autoRefresh:"AUTO-REFRESH 15s",
+        loading:"Loading...",noOnline:"No users online right now",secondsAgo:"s ago",
+        searchPlaceholder:"🔍 Search by username...",filterAll:"ALL",filterActive:"ACTIVE",filterDisabled:"DISABLED",filterExpired:"EXPIRED",
+        createUser:"Create User",daysLeft:"days left",active:"ACTIVE",disabled:"DISABLED",expired:"EXPIRED",
+        config:"Config",edit:"Edit",reset:"Reset",off:"Off",on:"On",delete:"Delete",
+        noUsers:"NO USERS YET",noUsersDesc:'Click "Create User" to add your first VPN account',
+        noResults:"NO RESULTS FOUND",noResultsDesc:"Try changing your search or filter",
+        createNewUser:"Create New User",createNewUserSub:"Build a VPN account in seconds",
+        editUser:"Edit User",username:"USERNAME",trafficQuota:"TRAFFIC QUOTA (GB)",
+        validity:"VALIDITY (DAYS)",createVpnAccount:"🚀 CREATE VPN ACCOUNT",saveChanges:"Save Changes",
+        subscriptionUrl:"SUBSCRIPTION URL",copy:"Copy",openWebPanel:"Open Web Panel",copyAll:"Copy All",close:"Close",
+        cancel:"Cancel",confirm:"Confirm",
+        confirmDeleteTitle:"Delete User",confirmDeleteText:"Are you sure you want to delete this user? This action cannot be undone.",
+        confirmResetTitle:"Reset Traffic",confirmResetText:"This will reset the user's used traffic to 0 and restart their expiry countdown.",
+        quickPlans:"QUICK PLANS",quickPlansHint:"one click to fill",
+        planBronze:"BRONZE",planSilver:"SILVER",planGold:"GOLD",planDiamond:"DIAMOND",planVip:"VIP",
+        orderSummary:"ORDER SUMMARY",sumUser:"👤 USER",sumQuota:"📊 QUOTA",sumValidity:"📅 VALIDITY",
+        sumExpires:"⏰ EXPIRES ON",sumDaily:"⚡ AVERAGE DAILY USAGE",sumDaysUnit:"days"
+    },
+    fa:{
+        vpnControlPanel:"پنل مدیریت VPN",dashboard:"داشبورد",manageUsers:"مدیریت کاربران",panelSettings:"تنظیمات پنل",
+        community:"ارتباطات",joinTelegram:"عضویت در تلگرام",supportDeveloper:"پشتیبانی سازنده",
+        designedDeveloped:"طراحی و توسعه توسط",logout:"خروج",usersManagement:"مدیریت کاربران",
+        usersSub:"مدیریت کامل اکانت‌ها و کانفیگ‌های VPN",administrator:"مدیر",online:"آنلاین",
+        totalUsers:"کل کاربران",allAccounts:"تمام حساب‌ها",activeUsers:"فعال",currentlyActive:"در حال حاضر فعال",
+        disabledUsers:"غیرفعال",turnedOff:"خاموش شده",usedTraffic:"ترافیک مصرفی",totalConsumption:"مجموع مصرف",
+        onlineUsersTitle:"کاربران آنلاین",onlineLive:"زنده",autoRefresh:"آپدیت خودکار هر ۱۵ ثانیه",
+        loading:"در حال بارگذاری...",noOnline:"کاربری آنلاین نیست",secondsAgo:"ثانیه پیش",
+        searchPlaceholder:"🔍 جستجو بر اساس نام کاربر...",filterAll:"همه",filterActive:"فعال",filterDisabled:"غیرفعال",filterExpired:"منقضی",
+        createUser:"ساخت کاربر",daysLeft:"روز باقی",active:"فعال",disabled:"غیرفعال",expired:"منقضی",
+        config:"کانفیگ",edit:"ویرایش",reset:"ریست",off:"خاموش",on:"روشن",delete:"حذف",
+        noUsers:"هنوز کاربری ساخته نشده",noUsersDesc:'برای ساخت اولین کاربر دکمه "ساخت کاربر" را بزنید',
+        noResults:"نتیجه‌ای یافت نشد",noResultsDesc:"جستجو یا فیلتر خود را تغییر دهید",
+        createNewUser:"ساخت کاربر جدید",createNewUserSub:"در چند ثانیه یک حساب VPN بسازید",
+        editUser:"ویرایش کاربر",username:"نام کاربری",trafficQuota:"حجم ترافیک (گیگابایت)",
+        validity:"اعتبار (روز)",createVpnAccount:"🚀 ساخت حساب VPN",saveChanges:"ذخیره تغییرات",
+        subscriptionUrl:"لینک اشتراک",copy:"کپی",openWebPanel:"پنل وب",copyAll:"کپی همه",close:"بستن",
+        cancel:"انصراف",confirm:"تایید",
+        confirmDeleteTitle:"حذف کاربر",confirmDeleteText:"آیا مطمئن هستید می‌خواهید این کاربر را حذف کنید؟ این عمل قابل بازگشت نیست.",
+        confirmResetTitle:"ریست ترافیک",confirmResetText:"ترافیک مصرفی کاربر صفر می‌شود و شمارش انقضا از نو شروع می‌شود.",
+        quickPlans:"پلن‌های آماده",quickPlansHint:"با یک کلیک پر میشه",
+        planBronze:"برنزی",planSilver:"نقره‌ای",planGold:"طلایی",planDiamond:"الماس",planVip:"VIP",
+        orderSummary:"خلاصه سفارش",sumUser:"👤 کاربر",sumQuota:"📊 حجم",sumValidity:"📅 اعتبار",
+        sumExpires:"⏰ تاریخ انقضا",sumDaily:"⚡ میانگین مصرف روزانه",sumDaysUnit:"روز"
+    }
+};
+
+let currentLanguage = localStorage.getItem('nikanPanelLanguage') || 'en';
+
+function applyLanguage(){
+    const lang = translations[currentLanguage];
+    document.documentElement.lang = currentLanguage;
+    document.documentElement.dir = currentLanguage === 'fa' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('rtl', currentLanguage === 'fa');
+
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if(lang[key]) el.textContent = lang[key];
+    });
+
+    document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+        const key = el.getAttribute('data-i18n-ph');
+        if(lang[key]) el.placeholder = lang[key];
+    });
+
+    document.getElementById('languageBtn').innerText = currentLanguage === 'en' ? 'فارسی' : 'English';
+    updateSummary();
+}
+
+function toggleLanguage(){
+    currentLanguage = currentLanguage === 'en' ? 'fa' : 'en';
+    localStorage.setItem('nikanPanelLanguage', currentLanguage);
+    applyLanguage();
+}
+
+function showToast(message, type){
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.className = 'toast show';
+    if(type) toast.classList.add(type);
+    setTimeout(()=>{ toast.classList.remove('show'); }, 2500);
+}
+
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); }
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+function openAddModal(){
+    // ریست وضعیت فرم
+    document.getElementById('add_name').value = '';
+    document.getElementById('add_quota').value = 30;
+    document.getElementById('add_days').value = 30;
+    document.getElementById('add_quota_slider').value = 30;
+    document.getElementById('add_days_slider').value = 30;
+    document.querySelectorAll('.plan-card').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('#addModal .preset').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('#addModal .presets').forEach(ps=>{
+        const btn30 = ps.querySelector('.preset:nth-child(2)');
+        if(btn30) btn30.classList.add('active');
+    });
+    updateNameCount();
+    updateSummary();
+    openModal('addModal');
+}
+
+function setValue(inputId, val, btn){
+    document.getElementById(inputId).value = val;
+    if(btn && btn.parentElement){
+        btn.parentElement.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    // sync slider
+    const which = inputId.includes('quota') ? 'quota' : 'days';
+    if(inputId.startsWith('add_')) syncSlider(which);
+    updateSummary();
+}
+
+/* SLIDERS */
+function syncSlider(which){
+    const input = document.getElementById('add_' + which);
+    const slider = document.getElementById('add_' + which + '_slider');
+    const display = document.getElementById('add_' + which + '_display');
+    let val = parseInt(input.value) || 0;
+    const max = parseInt(slider.max);
+    if(val > max) slider.value = max; else slider.value = val;
+    display.innerText = val + (which === 'quota' ? ' GB' : ' D');
+    updateSummary();
+}
+
+function syncInput(which){
+    const input = document.getElementById('add_' + which);
+    const slider = document.getElementById('add_' + which + '_slider');
+    const display = document.getElementById('add_' + which + '_display');
+    input.value = slider.value;
+    display.innerText = slider.value + (which === 'quota' ? ' GB' : ' D');
+    // deactivate presets
+    document.querySelectorAll('#add_' + which).forEach(() => {});
+    const parent = input.parentElement;
+    const presets = parent.querySelector('.presets');
+    if(presets) presets.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
+    updateSummary();
+}
+
+/* RANDOM NAME */
+function generateRandomName(){
+    const adjectives = ['swift','rapid','blaze','ninja','cyber','ghost','shadow','nikan','nova','titan','thunder','rocket','viper','phoenix'];
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const num = Math.floor(Math.random() * 9000) + 1000;
+    document.getElementById('add_name').value = adj + num;
+    updateNameCount();
+    updateSummary();
+}
+
+function updateNameCount(){
+    const name = document.getElementById('add_name').value;
+    document.getElementById('nameCount').innerText = name.length;
+    updateSummary();
+}
+
+/* QUICK PLANS */
+function applyPlan(card, quota, days){
+    document.querySelectorAll('.plan-card').forEach(p=>p.classList.remove('active'));
+    card.classList.add('active');
+    document.getElementById('add_quota').value = quota;
+    document.getElementById('add_days').value = days;
+    syncSlider('quota');
+    syncSlider('days');
+    // ریست پریست‌ها
+    document.querySelectorAll('#addModal .preset').forEach(p=>p.classList.remove('active'));
+    updateSummary();
+}
+
+/* SUMMARY */
+function updateSummary(){
+    const lang = translations[currentLanguage];
+    const name = document.getElementById('add_name') ? document.getElementById('add_name').value.trim() : '';
+    const quota = parseFloat(document.getElementById('add_quota') ? document.getElementById('add_quota').value : 30) || 0;
+    const days = parseInt(document.getElementById('add_days') ? document.getElementById('add_days').value : 30) || 0;
+
+    const sumName = document.getElementById('sumName');
+    const sumQuota = document.getElementById('sumQuota');
+    const sumDays = document.getElementById('sumDays');
+    const sumExpiry = document.getElementById('sumExpiry');
+    const sumDaily = document.getElementById('sumDaily');
+    const quotaHint = document.getElementById('quotaHint');
+    const daysHint = document.getElementById('daysHint');
+
+    if(!sumName) return;
+
+    sumName.innerText = name || '—';
+    sumQuota.innerText = quota;
+    sumDays.innerText = days;
+
+    // Expiry date
+    if(days > 0){
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + days);
+        const opts = {year:'numeric', month:'short', day:'numeric'};
+        sumExpiry.innerText = expiry.toLocaleDateString(currentLanguage === 'fa' ? 'fa-IR' : 'en-US', opts);
+    } else {
+        sumExpiry.innerText = '—';
+    }
+
+    // Daily avg
+    if(days > 0 && quota > 0){
+        sumDaily.innerText = (quota / days).toFixed(2);
+    } else {
+        sumDaily.innerText = '0';
+    }
+
+    // Hints
+    if(quotaHint){
+        if(quota >= 500) quotaHint.innerText = currentLanguage === 'fa' ? '👑 حجم VIP' : '👑 VIP Volume';
+        else if(quota >= 100) quotaHint.innerText = currentLanguage === 'fa' ? '💎 حجم عالی' : '💎 Great';
+        else if(quota >= 50) quotaHint.innerText = currentLanguage === 'fa' ? '🔥 حجم خوب' : '🔥 Good';
+        else if(quota >= 10) quotaHint.innerText = currentLanguage === 'fa' ? '✓ حجم استاندارد' : '✓ Standard';
+        else quotaHint.innerText = currentLanguage === 'fa' ? '⚠ حجم کم' : '⚠ Low';
+    }
+
+    if(daysHint){
+        if(days >= 365) daysHint.innerText = currentLanguage === 'fa' ? '📅 یک سال' : '📅 1 Year';
+        else if(days >= 180) daysHint.innerText = currentLanguage === 'fa' ? '📅 ۶ ماه' : '📅 6 Months';
+        else if(days >= 90) daysHint.innerText = currentLanguage === 'fa' ? '📅 ۳ ماه' : '📅 3 Months';
+        else if(days >= 30) daysHint.innerText = currentLanguage === 'fa' ? '📅 ماهانه' : '📅 Monthly';
+        else daysHint.innerText = currentLanguage === 'fa' ? '📅 کوتاه‌مدت' : '📅 Short-term';
+    }
+}
+
+function setFilter(filter){
+    currentFilter = filter;
+    document.querySelectorAll('.filter-tab').forEach(t=>{
+        t.classList.toggle('active', t.dataset.filter === filter);
+    });
+    filterUsers();
+}
+
+function filterUsers(){
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('.user-row');
+    let visible = 0;
+
+    rows.forEach(row=>{
+        const name = row.dataset.name || '';
+        const status = row.dataset.status || '';
+
+        const matchSearch = name.includes(search);
+        const matchFilter = (currentFilter === 'all') || (status === currentFilter);
+
+        if(matchSearch && matchFilter){
+            row.style.display = '';
+            visible++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    const empty = document.getElementById('emptyState');
+    const noResults = document.getElementById('noResults');
+    if(noResults){
+        if(rows.length > 0 && visible === 0){
+            noResults.style.display = 'block';
+            if(empty) empty.style.display = 'none';
+        } else {
+            noResults.style.display = 'none';
+        }
+    }
+}
+
+async function refreshOnlineUsers(){
+    try{
+        const res = await fetch('/api/online_users');
+        const data = await res.json();
+
+        if(data.status !== 'success') return;
+
+        const lang = translations[currentLanguage];
+        document.getElementById('onlineCount').innerText = data.count;
+
+        const list = document.getElementById('onlineList');
+
+        if(data.count === 0){
+            list.innerHTML = `<div class="online-empty"><div class="online-empty-icon">💤</div><div>${lang.noOnline}</div></div>`;
+        } else {
+            list.innerHTML = data.users.map(u=>`
+                <div class="online-user">
+                    <span class="mini-dot"></span>
+                    <b>${escapeHtml(u.name)}</b>
+                    <span class="sep">·</span>
+                    <span class="usage">${u.used_gb} / ${u.quota_gb} GB</span>
+                    <small>${u.seconds_ago}${lang.secondsAgo}</small>
+                </div>
+            `).join('');
+        }
+
+        const onlineNames = data.users.map(u=>u.name);
+        document.querySelectorAll('.user-avatar[data-user]').forEach(av=>{
+            if(onlineNames.includes(av.dataset.user)){
+                av.classList.add('online');
+            } else {
+                av.classList.remove('online');
+            }
+        });
+
+    } catch(err){
+        console.log('Online fetch error:', err);
+    }
+}
+
+async function submitAddUser(e){
+    e.preventDefault();
+    const name = document.getElementById('add_name').value.trim();
+    const quota = document.getElementById('add_quota').value;
+    const days = document.getElementById('add_days').value;
+    const btn = document.getElementById('addBtnSubmit');
+    const originalText = btn.innerText;
+
+    btn.innerText = currentLanguage === 'fa' ? '⏳ در حال ساخت...' : '⏳ Creating...';
+    btn.disabled = true;
+
+    try{
+        const res = await fetch('/api/add_user', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({name, quota, days})
+        });
+        const data = await res.json();
+
+        if(data.status === 'success'){
+            showToast(currentLanguage === 'fa' ? 'کاربر ساخته شد ✓' : 'User created ✓', 'success');
+            setTimeout(()=>location.reload(), 700);
+        } else {
+            showToast(data.message || 'Error', 'error');
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    } catch(err){
+        showToast(currentLanguage === 'fa' ? 'خطا در ارتباط با سرور' : 'Server error', 'error');
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+
+function openEdit(id, name, quota, days){
+    document.getElementById('edit_id').value = id;
+    document.getElementById('edit_name').value = name;
+    document.getElementById('edit_quota').value = quota;
+    document.getElementById('edit_days').value = days;
+    document.querySelectorAll('#editModal .preset').forEach(p=>p.classList.remove('active'));
+    openModal('editModal');
+}
+
+async function submitEditUser(e){
+    e.preventDefault();
+    const id = document.getElementById('edit_id').value;
+    const quota = document.getElementById('edit_quota').value;
+    const days = document.getElementById('edit_days').value;
+
+    try{
+        const res = await fetch('/api/edit_user/' + id, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({quota_gb:quota, expire_days:days})
+        });
+        const data = await res.json();
+
+        if(data.status === 'success'){
+            showToast(currentLanguage === 'fa' ? 'کاربر ویرایش شد ✓' : 'User updated ✓', 'success');
+            setTimeout(()=>location.reload(), 700);
+        } else {
+            showToast(data.message || 'Error', 'error');
+        }
+    } catch(err){
+        showToast('Error', 'error');
+    }
+}
+
+async function toggleUser(id){
+    try{
+        const res = await fetch('/api/toggle_user/' + id, {method:'POST'});
+        const data = await res.json();
+        if(data.status === 'success') location.reload();
+    } catch(err){
+        showToast('Error', 'error');
+    }
+}
+
+function openConfirm(titleKey, textKey, callback){
+    const lang = translations[currentLanguage];
+    document.getElementById('confirmTitle').innerText = lang[titleKey] || titleKey;
+    document.getElementById('confirmText').innerText = lang[textKey] || textKey;
+    confirmCallback = callback;
+    openModal('confirmModal');
+}
+
+document.getElementById('confirmBtn').addEventListener('click', ()=>{
+    closeModal('confirmModal');
+    if(confirmCallback) confirmCallback();
+    confirmCallback = null;
+});
+
+function confirmDelete(id){
+    openConfirm('confirmDeleteTitle', 'confirmDeleteText', async ()=>{
+        try{
+            const res = await fetch('/api/delete_user/' + id, {method:'POST'});
+            const data = await res.json();
+            if(data.status === 'success'){
+                showToast(currentLanguage === 'fa' ? 'کاربر حذف شد' : 'User deleted', 'success');
+                setTimeout(()=>location.reload(), 600);
+            }
+        } catch(err){ showToast('Error', 'error'); }
+    });
+}
+
+function confirmReset(id){
+    openConfirm('confirmResetTitle', 'confirmResetText', async ()=>{
+        try{
+            const res = await fetch('/api/reset_user/' + id, {method:'POST'});
+            const data = await res.json();
+            if(data.status === 'success'){
+                showToast(currentLanguage === 'fa' ? 'ترافیک صفر شد ✓' : 'Traffic reset ✓', 'success');
+                setTimeout(()=>location.reload(), 600);
+            }
+        } catch(err){ showToast('Error', 'error'); }
+    });
+}
+
+async function loadUserConfig(id){
+    showToast(currentLanguage === 'fa' ? 'در حال بارگذاری...' : 'Loading...');
+
+    try{
+        const res = await fetch('/api/user_config/' + id);
+        const data = await res.json();
+
+        if(data.status !== 'success'){
+            showToast(data.message || 'Error', 'error');
+            return;
+        }
+
+        currentConfigs = data.configs;
+        currentSub = data.sub;
+
+        document.getElementById('cfgTitle').innerText =
+            (currentLanguage === 'fa' ? 'کانفیگ‌های · ' : 'Configurations · ') + data.user.name;
+
+        document.getElementById('subUrlField').value = data.sub;
+
+        const cont = document.getElementById('cfgContainer');
+        cont.innerHTML = '';
+
+        data.configs.forEach((c, i)=>{
+            const box = document.createElement('div');
+            box.className = 'config-box';
+            box.innerHTML = `
+                <div class="config-top">
+                    <div>
+                        <div class="config-title">${escapeHtml(c.title)}</div>
+                        <div class="config-desc">${escapeHtml(c.desc)}</div>
+                    </div>
+                    <div class="config-actions">
+                        <button class="btn btn-blue" data-i="${i}" onclick="copyCfg(this)">${currentLanguage === 'fa' ? 'کپی' : 'Copy'}</button>
+                        <button class="btn btn-dark" data-i="${i}" onclick="qrCfg(this)">QR</button>
+                    </div>
+                </div>`;
+            cont.appendChild(box);
+        });
+
+        document.getElementById('qrWrap').style.display = 'none';
+        openModal('configModal');
+    } catch(err){
+        showToast('Error', 'error');
+    }
+}
+
+function escapeHtml(v){
+    return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+function copyCfg(btn){ copyText(currentConfigs[+btn.dataset.i].config); }
+function qrCfg(btn){ const c = currentConfigs[+btn.dataset.i]; showQR(c.config, c.title); }
+function copySubLink(){ navigator.clipboard.writeText(currentSub); showToast(currentLanguage === 'fa' ? 'لینک کپی شد ✓' : 'Link copied ✓', 'success'); }
+function openSubLink(){ window.open(currentSub, '_blank'); }
+function copyAllConfigs(){ navigator.clipboard.writeText(currentConfigs.map(c=>c.config).join('\n')); showToast(currentLanguage === 'fa' ? 'همه کپی شد ✓' : 'All copied ✓', 'success'); }
+function copyText(t){ navigator.clipboard.writeText(t); showToast(currentLanguage === 'fa' ? 'کپی شد ✓' : 'Copied ✓', 'success'); }
+
+function showQR(cfg, title){
+    const box = document.getElementById('qrBox');
+    box.innerHTML = '';
+    new QRCode(box, {text:cfg, width:180, height:180});
+    document.getElementById('qrText').innerText = title;
+    document.getElementById('qrWrap').style.display = 'block';
+}
+
+document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click', e=>{ if(e.target === o) o.classList.remove('show'); });
+});
+
+applyLanguage();
+refreshOnlineUsers();
+setInterval(refreshOnlineUsers, 15000);
+updateSummary();
+</script>
+
+</body>
+</html>
