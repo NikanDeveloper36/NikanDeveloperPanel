@@ -1,288 +1,241 @@
-# ✦ N I K A N · D E V · P A N E L ✦
+<p align="center">
+  <img src="static/nikan-logo.jpg" width="120" alt="Nikan Dev Panel" style="border-radius:28px"/>
+</p>
+
+<h1 align="center">Nikan Dev Panel</h1>
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:05001A,45:101B4D,75:312E81,100:00BFFF&height=190&section=header&text=%E2%9C%A6%20N%20I%20K%20A%20N%20%C2%B7%20D%20E%20V%20%C2%B7%20P%20A%20N%20E%20L%20%E2%9C%A6&fontColor=FFFFFF&fontSize=38&fontAlignY=42&animation=twinkling" width="100%"/>
+  <b>A self-hosted panel for managing Xray / VLESS users, quotas and subscription links.</b>
 </p>
 
 <p align="center">
-  <strong>پنل مدرن و حرفه‌ای برای مدیریت سرویس‌ها، کاربران، کانفیگ‌ها و اشتراک‌ها</strong>
-</p>
-
-<p align="center">
-  <a href="https://railway.app/">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:312E81,100:00BFFF&height=55&text=%E2%9C%A6%20DEPLOY%20ON%20RAILWAY%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
+  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel/releases/latest">
+    <img src="https://img.shields.io/github/v/release/NikanDeveloper36/NikanDeveloperPanel?label=release&color=2fe6a8" alt="Release"/>
   </a>
-  &nbsp;
-  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:4C1D95,100:7C3AED&height=55&text=%E2%9C%A6%20VIEW%20ON%20GITHUB%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
-  </a>
+  <img src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/flask-3.0-FFFFFF?logo=flask&logoColor=000000" alt="Flask"/>
+  <img src="https://img.shields.io/badge/xray-core-2fe6a8" alt="Xray"/>
+  <img src="https://img.shields.io/badge/license-none-lightgrey" alt="License"/>
 </p>
-
----
-
-## ✦ درباره Nikan Dev Panel
-
-**Nikan Dev Panel** یک پنل مدرن برای مدیریت سرویس‌ها و اطلاعات کاربران است که با تمرکز روی ظاهر حرفه‌ای، استفاده راحت در موبایل و نمایش مرتب اطلاعات طراحی شده است.
-
-پنل می‌تواند اطلاعات سرویس‌ها، کاربران، حجم مصرفی، تاریخ انقضا، کانفیگ‌ها و لینک اشتراک را در یک رابط کاربری جمع‌وجور و مدرن نمایش دهد.
-
-هدف پروژه این است که مدیریت سرویس برای کاربر نهایی ساده باشد و در عین حال ظاهر پنل حس یک داشبورد حرفه‌ای و مدرن را منتقل کند.
-
----
-
-## ✦ ظاهر و تجربه کاربری
-
-رابط کاربری Nikan Dev Panel بر پایه یک ظاهر تاریک و مدرن طراحی شده است.
-
-• پس‌زمینه تیره و فضایی  
-• ترکیب آبی، Cyan و Purple  
-• کارت‌های شیشه‌ای و نیمه‌شفاف  
-• افکت‌های Glow و نورپردازی نرم  
-• ستاره‌ها و پس‌زمینه متحرک  
-• انیمیشن‌های سبک و روان  
-• طراحی Mobile First  
-• سازگار با صفحه‌های کوچک موبایل  
-• بدون اسکرول افقی و بیرون‌زدگی محتوا  
-• دکمه‌های Copy برای اطلاعات مهم  
-• نمایش مرتب اطلاعات سرویس  
-
-نمای کلی رابط:
-
-<pre>
-╭──────────────────────────────╮
-│      ✦ NIKAN DEV PANEL ✦     │
-│                              │
-│   USERNAME                   │
-│   ───────────────────────    │
-│   ● ACTIVE                   │
-│                              │
-│   VOLUME                     │
-│   ███████████░░░  72%       │
-│                              │
-│   USED       REMAINING      │
-│   28 GB         72 GB       │
-│                              │
-│   EXPIRATION                 │
-│   30 DAYS REMAINING          │
-│                              │
-│   ┌──────────────────────┐   │
-│   │   COPY SUBSCRIPTION  │   │
-│   └──────────────────────┘   │
-╰──────────────────────────────╯
-</pre>
-
----
-
-## 🧩 پنل از چه بخش‌هایی تشکیل شده؟
-
-Nikan Dev Panel فقط یک صفحه ساده برای نمایش لینک نیست؛ بخش‌های مختلف پنل برای مدیریت اطلاعات سرویس کنار هم قرار گرفته‌اند.
-
-### 👤 کاربران
-
-اطلاعات هر کاربر می‌تواند شامل موارد زیر باشد:
-
-• Username  
-• وضعیت سرویس  
-• حجم کل  
-• حجم مصرف‌شده  
-• حجم باقی‌مانده  
-• درصد مصرف  
-• تاریخ شروع  
-• تاریخ انقضا  
-• زمان باقی‌مانده  
-• UUID یا شناسه سرویس  
-• اطلاعات اتصال در صورت وجود  
-
----
-
-### 🔗 کانفیگ‌ها
-
-کانفیگ‌های مربوط به هر سرویس به صورت جداگانه نمایش داده می‌شوند.
-
-برای هر کانفیگ می‌توان:
-
-• کانفیگ را مشاهده کرد  
-• کانفیگ را کپی کرد  
-• چند کانفیگ را جداگانه مدیریت کرد  
-• اطلاعات را بدون شلوغی در صفحه مشاهده کرد  
-
----
-
-### 📡 Subscription
-
-برای هر سرویس می‌توان لینک Subscription مربوط به همان کاربر را نمایش داد.
-
-کاربر می‌تواند لینک اشتراک خود را مستقیماً از داخل پنل دریافت و کپی کند.
-
----
-
-### 📊 مصرف حجم
-
-اطلاعات مصرف سرویس به صورت واضح نمایش داده می‌شود:
-
-<pre>
-Total
-100 GB
-
-Used
-28 GB
-
-Remaining
-72 GB
-
-Usage
-28%
-██████░░░░░░░░░░
-</pre>
-
----
-
-### ⏳ زمان سرویس
-
-پنل می‌تواند وضعیت زمانی سرویس را نمایش دهد:
-
-• تاریخ شروع  
-• تاریخ پایان  
-• روزهای باقی‌مانده  
-• وضعیت Active  
-• وضعیت Expired  
-
----
-
-### ⚙️ تنظیمات
-
-اطلاعات اتصال و تنظیمات مورد نیاز پروژه می‌توانند از طریق Environment Variables یا تنظیمات پروژه مدیریت شوند.
-
-به این ترتیب اطلاعات حساس مستقیماً داخل رابط کاربری قرار نمی‌گیرند.
-
----
-
-# 🚀 راه‌اندازی
-
-راه‌اندازی پروژه ساده طراحی شده است.
-
-**فقط پروژه را Deploy کن و تمام.**
-
-برای اجرای پروژه روی Railway:
-
-1. وارد Repository پروژه شوید.
-2. پروژه را به Railway متصل کنید.
-3. متغیرهای محیطی مورد نیاز را وارد کنید.
-4. Deploy را بزنید.
-5. بعد از اتمام Deploy، آدرس پنل در اختیار شما قرار می‌گیرد.
-
----
-
-# ☁️ Deploy روی Railway
-
-برای اجرای سریع پروژه می‌توانید از Railway استفاده کنید.
 
 <p align="center">
-  <a href="https://railway.app/">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:312E81,100:00BFFF&height=55&text=%E2%9C%A6%20DEPLOY%20ON%20RAILWAY%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
-  </a>
-</p>
-
-بعد از اتصال Repository:
-
-<pre>
-GitHub Repository
-       ↓
-    Railway
-       ↓
- Environment Variables
-       ↓
-     Deploy
-       ↓
-   Nikan Dev Panel
-</pre>
-
----
-
-# 📱 Mobile First
-
-Nikan Dev Panel با تمرکز روی موبایل ساخته شده است.
-
-طراحی صفحه باید به گونه‌ای باشد که:
-
-• محتوا از عرض صفحه خارج نشود  
-• اسکرول افقی ایجاد نشود  
-• کارت‌ها بیش از حد بزرگ نباشند  
-• متن‌ها روی صفحه به هم نریزند  
-• دکمه‌ها برای لمس موبایل مناسب باشند  
-• اطلاعات مهم بدون اسکرول‌های غیرضروری قابل مشاهده باشند  
-
-پنل برای استفاده روزمره روی صفحه‌های کوچک طراحی شده است.
-
----
-
-# ⚡ ویژگی‌های اصلی
-
-• داشبورد مدرن  
-• طراحی مخصوص موبایل  
-• نمایش وضعیت سرویس  
-• نمایش حجم کل  
-• نمایش حجم مصرف‌شده  
-• نمایش حجم باقی‌مانده  
-• نمایش درصد مصرف  
-• نمایش تاریخ انقضا  
-• نمایش زمان باقی‌مانده  
-• نمایش Subscription  
-• نمایش کانفیگ‌ها  
-• Copy سریع اطلاعات  
-• طراحی Dark  
-• افکت‌های Neon  
-• Glass UI  
-• پس‌زمینه متحرک  
-• سازگار با Railway  
-• قابلیت اتصال به Backend و API  
-
----
-
-# ✦ هدف پروژه
-
-هدف Nikan Dev Panel ساخت یک تجربه ساده و حرفه‌ای برای کاربری است که فقط می‌خواهد وارد پنل شود، وضعیت سرویس خود را ببیند و اطلاعات اتصالش را سریع دریافت کند.
-
-بدون صفحه‌های شلوغ.
-
-بدون منوهای اضافه.
-
-بدون طراحی قدیمی.
-
-فقط یک داشبورد مدرن، سریع و قابل استفاده.
-
----
-
-# ⭐ حمایت از پروژه
-
-اگر این پروژه برایت مفید بود، می‌توانی با Star کردن Repository از پروژه حمایت کنی.
-
-<p align="center">
-  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:4C1D95,100:7C3AED&height=55&text=%E2%9C%A6%20%E2%98%85%20STAR%20THE%20PROJECT%20%E2%98%85%20%E2%9C%A6&fontColor=FFFFFF&fontSize=18&fontAlignY=52&animation=twinkling" />
-  </a>
+  <a href="#-quick-start">Quick Start</a> ·
+  <a href="#-deployment">Deployment</a> ·
+  <a href="#-configuration">Configuration</a> ·
+  <a href="#-rest-api">API</a> ·
+  <a href="#-فهرست-فارسی">فارسی</a>
 </p>
 
 ---
 
-# ✦ Repository
+## Overview
 
-<p align="center">
-  <a href="https://github.com/NikanDeveloper36/NikanDeveloperPanel">
-    <img src="https://capsule-render.vercel.app/api?type=rect&color=0:05001A,45:172554,75:312E81,100:00BFFF&height=55&text=%E2%9C%A6%20VIEW%20NIKAN%20DEV%20PANEL%20ON%20GITHUB%20%E2%9C%A6&fontColor=FFFFFF&fontSize=17&fontAlignY=52&animation=twinkling" />
-  </a>
-</p>
+**Nikan Dev Panel** is a single-container web panel that bundles **Nginx**, **Xray-core** and a **Flask** application. It lets an administrator create and manage VPN users, track their traffic usage, and hand out per-user VLESS configurations and subscription URLs.
+
+The end user never needs the admin panel — they open their own subscription link and get:
+
+- live usage (total / used / remaining / days left)
+- a copyable subscription URL for any client
+- all 10 of their VLESS configs, individually copyable or as QR codes
+- full **English / فارسی** interface toggle
+
+Everything runs from **one port** (`8080` by default): Nginx fronts the Flask UI and reverse-proxies the Xray inbound.
+
+| | |
+|---|---|
+| **Backend** | Flask 3, SQLite (`users.db`) |
+| **Core** | Xray-core (VLESS + WebSocket + TLS) |
+| **Frontend** | Hand-written HTML/CSS/JS, no build step |
+| **Bot** | Optional Telegram bot (`pyTelegramBotAPI`) |
+| **Packaging** | Docker (`python:3.10-slim` + Nginx + Xray) |
+
+![Subscription page preview](docs/subscription-preview.png)
 
 ---
 
-# 💙 حرف آخر
+## Features
 
-Nikan Dev Panel برای این ساخته شده که مدیریت سرویس‌ها و نمایش اطلاعات کاربران، هم ساده باشد و هم ظاهر حرفه‌ای خودش را حفظ کند.
+**Admin panel**
+- Dashboard with active-user monitoring
+- Full user management: add, edit, enable/disable, reset traffic, delete
+- Per-user quota (`GB`), expiry (`days`), UUID and status
+- Live online-users API (`/api/online_users`)
+- Settings page: Telegram bot token/admin ID, admin credentials, panel options
+- Dark, mobile-first UI with no horizontal overflow
 
-**مدیریت سرویس، ساده‌تر از همیشه.**
+**Subscription page** (`/sub/<uuid>`)
+- Animated dark theme (emerald + gold), reduced-motion aware
+- 30-segment usage meter with count-up numbers
+- Live usage graph and usage meter
+- Terminal-style subscription link box with one-tap copy
+- Copy-all-configs (base64 payload) and per-config QR codes
+- Automatic client detection — VPN clients receive raw base64, browsers get the HTML page
 
-ساخته شده با ♥️ توسط [@NeuralDevvv](https://t.me/NeuralDevvv)
+**Configs**
+- 10 VLESS configurations per user (different paths / `ed` params)
+- Config title format: `<username> | 𝗡𝗜𝗞𝗔𝗡 𝗗𝗘𝗩 𝗣𝗔𝗡𝗘ЛЬ | <n>`
 
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00BFFF,45:312E81,75:101B4D,100:05001A&height=120&section=footer&animation=twinkling" width="100%"/>
-</p>
+---
+
+## Project structure
+
+```
+NikanDeveloperPanel/
+├── app.py                     # Flask app, Xray/Nginx config builder, Telegram bot
+├── requirements.txt
+├── Dockerfile
+├── static/
+│   └── nikan-logo.jpg
+├── templates/
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── users.html
+│   ├── settings.html
+│   └── subscription.html
+└── docs/
+    └── subscription-preview.png
+```
+
+Runtime files (`users.db`, `xray_config.json`, `nginx.conf`, `panel_settings.json`) are generated on first start and are git-ignored.
+
+---
+
+## Quick Start
+
+### Docker (recommended)
+
+```bash
+git clone https://github.com/NikanDeveloper36/NikanDeveloperPanel.git
+cd NikanDeveloperPanel
+
+docker build -t nikan-dev-panel .
+docker run -d --name nikan-panel \
+  -p 8080:8080 \
+  -e SECRET_KEY="change-me" \
+  -e ADMIN_USER="admin" \
+  -e ADMIN_PASS="strong-password" \
+  nikan-dev-panel
+```
+
+Then open `http://localhost:8080`.
+
+### Local development
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+> Xray and Nginx are optional locally — the panel UI works without them; the core is only required to actually serve traffic.
+
+---
+
+## Configuration
+
+All settings are environment variables:
+
+| Variable | Default | Description |
+|---|---|---|
+| `PORT` | `8080` | Public port served by Nginx |
+| `SECRET_KEY` | `nikan-dev-panel-secret-key-change-me` | Flask session secret — **always change in production** |
+| `ADMIN_USER` | `admin` | Initial admin username |
+| `ADMIN_PASS` | `admin` | Initial admin password — **always change in production** |
+
+Internal (fixed) ports: Nginx `PORT` → Xray inbound `10000`, Xray API `10085`, Flask `5000`.
+
+Admin credentials can also be changed from the **Settings** page after first login.
+
+---
+
+## Deployment
+
+### Railway
+
+1. Fork this repository.
+2. In Railway → **New Project → Deploy from GitHub repo** → select your fork.
+3. Add the environment variables above.
+4. Deploy. Railway gives you a public URL.
+5. Map a custom domain with TLS if you want `wss://` endpoints.
+
+### Any Docker host
+
+```bash
+docker run -d -p 8080:8080 \
+  -e SECRET_KEY="..." -e ADMIN_USER="..." -e ADMIN_PASS="..." \
+  nikan-dev-panel
+```
+
+Works the same on a VPS, Hetzner, DigitalOcean, or Docker Compose.
+
+---
+
+## REST API
+
+All admin APIs require an authenticated session (`POST /login`).
+
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `/` | Landing / redirect |
+| `GET/POST` | `/login` | Admin login |
+| `GET` | `/logout` | End session |
+| `GET` | `/dashboard` | Dashboard |
+| `GET` | `/users` | User management |
+| `GET` | `/settings` | Settings |
+| `GET` | `/api/online_users` | Currently connected users |
+| `POST` | `/api/settings` | Update panel settings |
+| `POST` | `/api/add_user` | Create a user |
+| `POST` | `/api/edit_user/<id>` | Edit a user |
+| `POST` | `/api/reset_user/<id>` | Reset traffic counter |
+| `POST` | `/api/toggle_user/<id>` | Enable / disable |
+| `POST` | `/api/delete_user/<id>` | Delete a user |
+| `GET` | `/api/user_config/<id>` | Fetch one user's configs |
+| `GET` | `/sub/<user_uuid>` | Public subscription page (HTML) or base64 payload for VPN clients |
+
+---
+
+## Security notes
+
+- Set a strong `SECRET_KEY`, `ADMIN_USER` and `ADMIN_PASS` before exposing the panel.
+- Keep `/login` behind HTTPS (Nginx already terminates TLS for the Xray inbound).
+- The subscription URL contains a UUID — treat it like a password and never publish it.
+- SQLite database and generated configs live next to the app; back them up, don't commit them.
+
+---
+
+## نسخه فارسی
+
+**Nikan Dev Panel** یک پنل میزبانی‌شدهٔ تک‌دیترین است که **Nginx**، **Xray-core** و یک اپلیکیشن **Flask** را کنار هم قرار می‌دهد. مدیر می‌تواند کاربر بسازد، حجم مصرفی را دنبال کند و لینک اشتراک و کانفیگ‌های VLESS را به هر کاربر بدهد.
+
+**سریع‌ترین راه‌اندازی:**
+
+```bash
+git clone https://github.com/NikanDeveloper36/NikanDeveloperPanel.git
+cd NikanDeveloperPanel
+docker build -t nikan-dev-panel .
+docker run -d -p 8080:8080 \
+  -e SECRET_KEY="..." -e ADMIN_USER="admin" -e ADMIN_PASS="..." \
+  nikan-dev-panel
+```
+
+**قابلیت‌ها:**
+- داشبورد مدرن و واکنش‌گرا (Mobile First)
+- مدیریت کامل کاربران: افزودن، ویرایش، فعال/غیرفعال، ریست حجم، حذف
+- نمایش حجم کل، مصرف‌شده، باقی‌مانده، درصد و روزهای انقضا
+- صفحهٔ اشتراک با انیمیشن و پشتیبانی از **فارسی / English**
+- ۱۰ کانفیگ VLESS برای هر کاربر + کپی سریع و QR
+- تشخیص خودکار کلاینت (کلاینت‌های VPN کانفیگ خام base64 می‌گیرند)
+- ربات تلگرام اختیاری برای مدیریت
+
+**متغیرهای محیطی:** `PORT`، `SECRET_KEY`، `ADMIN_USER`، `ADMIN_PASS`
+
+ساخته شده توسط [@NeuralDevvv](https://t.me/NeuralDevvv)
+
+---
+
+## Credits
+
+Created by **Nikan Developer** — [@NeuralDevvv](https://t.me/NeuralDevvv)
+
+Built with [Flask](https://flask.palletsprojects.com/), [Xray-core](https://github.com/XTLS/Xray-core) and [Nginx](https://nginx.org/).
+
+If this project helps you, consider giving it a ⭐ on [GitHub](https://github.com/NikanDeveloper36/NikanDeveloperPanel).
