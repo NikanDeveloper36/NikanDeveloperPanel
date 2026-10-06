@@ -6,9 +6,14 @@
 
 <title>Nikan Dev Panel Subscription | {{ user_name }}</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -17,659 +22,939 @@
 }
 
 :root{
-    --bg:#02050c;
-    --card:rgba(7,15,30,.86);
-    --card2:rgba(3,9,20,.95);
-    --blue:#168cff;
-    --cyan:#00eaff;
-    --blue2:#246bff;
-    --purple:#7b4dff;
-    --green:#00f5a0;
-    --red:#ff416c;
-    --white:#f5f9ff;
-    --muted:#71809c;
-    --line:rgba(0,220,255,.15);
+    --bg:#06060a;
+    --panel:rgba(255,255,255,.045);
+    --panel-2:rgba(255,255,255,.026);
+    --line:rgba(255,255,255,.09);
+    --emerald:#2fe6a8;
+    --emerald-2:#12b486;
+    --gold:#ffcb57;
+    --rose:#ff6f91;
+    --text:#eef1f5;
+    --muted:#8d95a5;
+    --shadow:0 26px 70px rgba(0,0,0,.5);
 }
 
-html,body{
-    min-height:100%;
-}
+html,body{min-height:100%}
 
 body{
-    background:
-        radial-gradient(circle at 8% 0%,rgba(0,160,255,.14),transparent 30%),
-        radial-gradient(circle at 92% 15%,rgba(83,65,255,.12),transparent 30%),
-        radial-gradient(circle at 50% 100%,rgba(0,210,255,.07),transparent 35%),
-        var(--bg);
-    color:var(--white);
-    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
     overflow-x:hidden;
+    position:relative;
+    line-height:1.5;
 }
 
-body::before{
-    content:"";
+/* ============ BACKGROUND FX ============ */
+
+.fx{
     position:fixed;
     inset:0;
-    z-index:-5;
-    background-image:
-        linear-gradient(rgba(0,190,255,.025) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(0,190,255,.025) 1px,transparent 1px);
-    background-size:42px 42px;
+    z-index:-3;
+    overflow:hidden;
     pointer-events:none;
 }
 
-body::after{
-    content:"";
-    position:fixed;
-    width:430px;
-    height:430px;
-    left:50%;
-    top:30%;
-    transform:translate(-50%,-50%);
+.blob{
+    position:absolute;
     border-radius:50%;
-    background:rgba(0,145,255,.055);
-    filter:blur(110px);
-    z-index:-4;
+    filter:blur(95px);
+    will-change:transform;
+}
+
+.b1{
+    width:48vmax;height:48vmax;
+    left:-16vmax;top:-18vmax;
+    background:radial-gradient(circle,rgba(47,230,168,.42),transparent 66%);
+    animation:drift1 26s ease-in-out infinite;
+}
+
+.b2{
+    width:42vmax;height:42vmax;
+    right:-14vmax;top:6vmax;
+    background:radial-gradient(circle,rgba(255,203,87,.30),transparent 66%);
+    animation:drift2 33s ease-in-out infinite;
+}
+
+.b3{
+    width:46vmax;height:46vmax;
+    left:26vmax;bottom:-20vmax;
+    background:radial-gradient(circle,rgba(255,111,145,.26),transparent 66%);
+    animation:drift3 41s ease-in-out infinite;
+}
+
+@keyframes drift1{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    50%{transform:translate3d(9vmax,7vmax,0) scale(1.14)}
+}
+@keyframes drift2{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    50%{transform:translate3d(-8vmax,10vmax,0) scale(1.18)}
+}
+@keyframes drift3{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    50%{transform:translate3d(7vmax,-9vmax,0) scale(1.1)}
+}
+
+.fx-grid{
+    position:fixed;
+    inset:0;
+    z-index:-2;
     pointer-events:none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(circle at 50% 35%,#000 10%,transparent 78%);
+    -webkit-mask-image:radial-gradient(circle at 50% 35%,#000 10%,transparent 78%);
 }
 
-button,input{
-    font:inherit;
+.fx-vignette{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:radial-gradient(circle at 50% 40%,transparent 40%,rgba(0,0,0,.65) 100%);
 }
 
-button{
-    cursor:pointer;
-}
+/* ============ LAYOUT ============ */
 
 .page{
     width:100%;
-    max-width:780px;
+    max-width:820px;
     margin:auto;
-    padding:14px;
+    padding:18px 14px 34px;
 }
 
-.card{
+.panel{
     position:relative;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10,23,45,.86),
-            rgba(3,8,19,.94)
-        );
+    background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
     border:1px solid var(--line);
-    border-radius:25px;
-    backdrop-filter:blur(24px);
-    -webkit-backdrop-filter:blur(24px);
-    box-shadow:
-        0 18px 55px rgba(0,0,0,.28),
-        inset 0 0 35px rgba(0,190,255,.025);
+    border-radius:26px;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:var(--shadow);
     overflow:hidden;
+    margin-top:16px;
 }
 
-.card::before{
+.panel::after{
     content:"";
     position:absolute;
-    top:0;
-    left:12%;
-    right:12%;
-    height:1px;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(0,234,255,.7),
-        transparent
-    );
+    inset:0;
+    border-radius:inherit;
+    pointer-events:none;
+    background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.07) 50%,transparent 65%);
+    transform:translateX(-120%);
+    animation:sheen 7.5s ease-in-out infinite;
 }
 
-/* HEADER */
+@keyframes sheen{
+    0%,68%{transform:translateX(-120%)}
+    100%{transform:translateX(120%)}
+}
 
-.header{
-    padding:17px;
+/* reveal on scroll */
+.reveal{
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);
+    transition-delay:var(--d,0ms);
+}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ TOP BAR ============ */
+
+.topbar{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
+    gap:12px;
+    padding:14px 16px;
+    border-radius:22px;
+    background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--line);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
 }
 
 .brand{
     display:flex;
     align-items:center;
-    gap:11px;
+    gap:12px;
+    min-width:0;
 }
 
-.logo{
-    width:44px;
-    height:44px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:18px;
-    font-weight:900;
-    color:var(--cyan);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,234,255,.16),
-            rgba(55,85,255,.16)
-        );
-    border:1px solid rgba(0,234,255,.2);
-    box-shadow:0 0 24px rgba(0,234,255,.12);
+.mark{
+    position:relative;
+    width:46px;
+    height:46px;
+    flex-shrink:0;
+    border-radius:15px;
+    display:grid;
+    place-items:center;
+    background:#0d0d14;
+    border:1px solid rgba(47,230,168,.28);
+    overflow:hidden;
 }
+
+.mark b{
+    position:relative;
+    z-index:2;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:20px;
+    color:var(--emerald);
+    text-shadow:0 0 16px rgba(47,230,168,.7);
+}
+
+.mark::before{
+    content:"";
+    position:absolute;
+    width:150%;
+    height:150%;
+    background:conic-gradient(from 0deg,transparent 0deg,rgba(47,230,168,.75) 70deg,rgba(255,203,87,.7) 140deg,transparent 220deg);
+    animation:spin 4.5s linear infinite;
+    opacity:.55;
+}
+
+.mark::after{
+    content:"";
+    position:absolute;
+    inset:1.5px;
+    border-radius:13px;
+    background:#0b0b11;
+    z-index:1;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .brand h1{
+    font-family:'Space Grotesk',sans-serif;
     font-size:17px;
-    font-weight:900;
-    letter-spacing:1px;
+    font-weight:700;
+    letter-spacing:.4px;
+    white-space:nowrap;
 }
 
 .brand p{
-    margin-top:4px;
-    color:var(--cyan);
-    font-size:8px;
-    letter-spacing:1.7px;
+    margin-top:2px;
+    color:var(--gold);
+    font-size:8.5px;
+    letter-spacing:2.4px;
+    font-weight:600;
 }
 
-.header-actions{
+.top-actions{
     display:flex;
     align-items:center;
-    gap:7px;
+    gap:8px;
+    flex-shrink:0;
 }
 
 .lang-btn{
-    height:34px;
-    padding:0 11px;
-    border-radius:11px;
-    border:1px solid rgba(0,234,255,.18);
-    background:rgba(0,234,255,.06);
-    color:#9aefff;
-    font-size:9px;
-    font-weight:900;
+    height:36px;
+    padding:0 13px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.4px;
+    transition:.25s;
+}
+.lang-btn:hover{
+    border-color:rgba(47,230,168,.45);
+    color:var(--emerald);
+    box-shadow:0 0 20px rgba(47,230,168,.16);
 }
 
 .status{
     display:flex;
     align-items:center;
-    gap:6px;
-    padding:8px 10px;
-    border-radius:20px;
-    background:rgba(0,245,160,.055);
-    border:1px solid rgba(0,245,160,.16);
-    color:var(--green);
-    font-size:8px;
-    font-weight:900;
+    gap:7px;
+    padding:9px 13px;
+    border-radius:12px;
+    background:rgba(47,230,168,.09);
+    border:1px solid rgba(47,230,168,.28);
+    color:var(--emerald);
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:1.4px;
 }
 
 .status-dot{
-    width:6px;
-    height:6px;
+    width:7px;height:7px;
     border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 9px var(--green);
+    background:var(--emerald);
+    box-shadow:0 0 10px var(--emerald);
+    animation:blink 1.6s ease-in-out infinite;
 }
 
-/* HERO */
+@keyframes blink{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.35;transform:scale(.75)}
+}
+
+/* ============ HERO ============ */
 
 .hero{
-    margin-top:14px;
-    padding:24px 17px 18px;
+    padding:32px 18px 20px;
     text-align:center;
 }
 
 .user-label{
     color:var(--muted);
-    font-size:8px;
-    letter-spacing:2px;
-    margin-bottom:7px;
+    font-size:9px;
+    letter-spacing:4px;
+    font-weight:600;
 }
 
 .username{
-    font-size:28px;
-    font-weight:900;
-    background:linear-gradient(
-        90deg,
-        #fff,
-        #00eaff,
-        #478cff,
-        #8964ff
-    );
+    margin-top:8px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:34px;
+    font-weight:700;
+    letter-spacing:-.5px;
+    background:linear-gradient(95deg,#fff 5%,var(--emerald) 45%,var(--gold) 95%);
+    background-size:200% 100%;
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
+    animation:hue 7s ease infinite;
+    word-break:break-all;
 }
 
-/* MAIN CIRCLE */
-
-.usage-circle{
-    position:relative;
-    width:218px;
-    height:218px;
-    margin:24px auto 22px;
+@keyframes hue{
+    0%,100%{background-position:0% 50%}
+    50%{background-position:100% 50%}
 }
 
-.usage-circle svg{
-    width:218px;
-    height:218px;
-    transform:rotate(-90deg);
-    overflow:visible;
+/* big percent */
+
+.bignum{
+    margin-top:26px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:66px;
+    font-weight:700;
+    line-height:1;
+    color:#fff;
+    text-shadow:0 0 42px rgba(47,230,168,.45);
 }
 
-.circle-bg{
-    fill:none;
-    stroke:rgba(0,234,255,.065);
-    stroke-width:11;
+.bignum span{
+    font-size:26px;
+    color:var(--emerald);
+    vertical-align:super;
+    margin-left:3px;
 }
 
-.circle-value{
-    fill:none;
-    stroke:url(#usageGradient);
-    stroke-width:11;
-    stroke-linecap:round;
-    filter:
-        drop-shadow(0 0 6px rgba(0,234,255,.65))
-        drop-shadow(0 0 14px rgba(0,110,255,.28));
-    transition:stroke-dashoffset 1s ease;
-}
-
-.circle-inner{
-    position:absolute;
-    inset:32px;
-    border-radius:50%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(
-            circle,
-            rgba(0,125,255,.2),
-            rgba(2,8,20,.92) 68%
-        );
-    border:1px solid rgba(0,234,255,.1);
-    box-shadow:
-        inset 0 0 35px rgba(0,120,255,.1),
-        0 0 30px rgba(0,110,255,.08);
-}
-
-.circle-percent{
-    font-size:36px;
-    font-weight:900;
-    text-shadow:0 0 20px rgba(0,234,255,.4);
-}
-
-.circle-label{
-    margin-top:4px;
-    color:var(--cyan);
-    font-size:9px;
-    letter-spacing:2px;
-    font-weight:900;
-}
-
-.circle-total{
-    margin-top:5px;
+.bigcap{
+    margin-top:7px;
     color:var(--muted);
-    font-size:8px;
+    font-size:9px;
+    letter-spacing:3.4px;
+    font-weight:600;
 }
 
-/* STATS */
+/* segmented meter */
+
+.meter{
+    display:flex;
+    gap:3px;
+    margin:20px auto 0;
+    max-width:520px;
+    height:26px;
+    padding:4px;
+    border-radius:12px;
+    background:rgba(0,0,0,.42);
+    border:1px solid var(--line);
+}
+
+.seg{
+    flex:1;
+    border-radius:4px;
+    background:rgba(255,255,255,.07);
+    transition:background .45s ease,box-shadow .45s ease,transform .45s ease;
+}
+
+.seg.on{
+    background:linear-gradient(180deg,var(--emerald),var(--emerald-2));
+    box-shadow:0 0 11px rgba(47,230,168,.65);
+    transform:scaleY(1.14);
+}
+
+.seg.on.warn{
+    background:linear-gradient(180deg,var(--gold),#e8a422);
+    box-shadow:0 0 11px rgba(255,203,87,.6);
+}
+
+.meter-sweep{
+    position:relative;
+    max-width:520px;
+    margin:9px auto 0;
+    height:2px;
+    border-radius:2px;
+    overflow:hidden;
+    background:rgba(255,255,255,.06);
+}
+
+.meter-sweep::after{
+    content:"";
+    position:absolute;
+    top:0;left:-40%;
+    width:40%;height:100%;
+    background:linear-gradient(90deg,transparent,var(--emerald),transparent);
+    animation:sweep 2.6s linear infinite;
+}
+
+@keyframes sweep{to{left:110%}}
+
+/* mini row */
+
+.mini{
+    display:flex;
+    justify-content:center;
+    gap:26px;
+    margin-top:16px;
+    flex-wrap:wrap;
+}
+
+.mini div{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:10px;
+    letter-spacing:1.6px;
+    color:var(--muted);
+    font-weight:600;
+}
+
+.mini i{
+    width:7px;height:7px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.mini .k-used{background:var(--emerald);box-shadow:0 0 9px var(--emerald)}
+.mini .k-total{background:var(--gold);box-shadow:0 0 9px var(--gold)}
+
+.mini b{color:#fff;font-weight:700;letter-spacing:.4px}
+
+/* ============ STATS ============ */
 
 .stats{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:9px;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    padding:18px;
+    border-top:1px solid var(--line);
+    background:rgba(0,0,0,.24);
 }
 
 .stat{
     position:relative;
-    padding:14px 12px;
-    min-height:91px;
+    padding:15px 12px;
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--line);
     text-align:left;
-    border-radius:17px;
-    background:rgba(1,7,18,.68);
-    border:1px solid rgba(255,255,255,.055);
     overflow:hidden;
+    transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s,box-shadow .35s;
 }
 
-.stat::after{
-    content:"";
-    position:absolute;
-    right:-25px;
-    bottom:-25px;
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    background:rgba(0,180,255,.05);
-    filter:blur(15px);
+.stat:hover{
+    transform:translateY(-6px);
+    border-color:rgba(47,230,168,.4);
+    box-shadow:0 16px 34px rgba(0,0,0,.45),0 0 26px rgba(47,230,168,.14);
 }
 
-.stat-icon{
-    font-size:17px;
-    margin-bottom:8px;
+.stat-ico{
+    width:34px;height:34px;
+    border-radius:11px;
+    display:grid;
+    place-items:center;
+    margin-bottom:11px;
+    background:rgba(47,230,168,.11);
+    border:1px solid rgba(47,230,168,.24);
+    color:var(--emerald);
 }
+
+.stat:nth-child(2) .stat-ico{background:rgba(255,203,87,.11);border-color:rgba(255,203,87,.26);color:var(--gold)}
+.stat:nth-child(3) .stat-ico{background:rgba(255,111,145,.11);border-color:rgba(255,111,145,.26);color:var(--rose)}
+.stat:nth-child(4) .stat-ico{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#fff}
+
+.stat-ico svg{width:17px;height:17px}
 
 .stat-label{
     color:var(--muted);
-    font-size:8px;
-    letter-spacing:.7px;
+    font-size:8.5px;
+    letter-spacing:1.1px;
+    font-weight:600;
 }
 
 .stat-value{
-    margin-top:5px;
-    font-size:15px;
-    font-weight:900;
+    margin-top:7px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:17px;
+    font-weight:700;
     color:#fff;
+    display:flex;
+    align-items:baseline;
+    gap:5px;
 }
 
-/* SECTIONS */
-
-.section{
-    margin-top:14px;
-    padding:18px;
+.stat-value .unit{
+    font-family:'Inter',sans-serif;
+    font-size:9.5px;
+    font-weight:600;
+    color:var(--muted);
+    letter-spacing:.6px;
 }
 
-.section-title{
+/* ============ GENERIC SECTION ============ */
+
+.sec{
+    padding:20px;
+}
+
+.sec-head{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
-    margin-bottom:14px;
+    gap:12px;
+    margin-bottom:16px;
 }
 
-.section-title h2{
-    font-size:13px;
-    font-weight:900;
-    letter-spacing:.5px;
+.sec-head h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.6px;
+    display:flex;
+    align-items:center;
+    gap:9px;
 }
 
-.section-title span{
-    color:var(--cyan);
-    font-size:8px;
-    letter-spacing:1.2px;
+.sec-head h2::before{
+    content:"";
+    width:3px;height:15px;
+    border-radius:3px;
+    background:linear-gradient(180deg,var(--emerald),var(--gold));
+    box-shadow:0 0 12px rgba(47,230,168,.6);
 }
 
-/* SUBSCRIPTION */
-
-.sub-box{
-    padding:13px;
-    border-radius:17px;
-    background:rgba(0,0,0,.27);
-    border:1px solid rgba(0,234,255,.1);
+.chip{
+    font-size:8.5px;
+    letter-spacing:1.6px;
+    font-weight:700;
+    padding:6px 11px;
+    border-radius:20px;
+    color:var(--gold);
+    background:rgba(255,203,87,.09);
+    border:1px solid rgba(255,203,87,.26);
 }
+
+/* ============ SUBSCRIPTION TERMINAL ============ */
+
+.terminal{
+    border-radius:18px;
+    background:#08080d;
+    border:1px solid rgba(255,255,255,.1);
+    overflow:hidden;
+}
+
+.term-bar{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:10px 13px;
+    background:rgba(255,255,255,.035);
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.term-bar i{
+    width:9px;height:9px;
+    border-radius:50%;
+    display:inline-block;
+}
+.term-bar i:nth-child(1){background:#ff6f91;box-shadow:0 0 8px rgba(255,111,145,.7)}
+.term-bar i:nth-child(2){background:var(--gold);box-shadow:0 0 8px rgba(255,203,87,.7)}
+.term-bar i:nth-child(3){background:var(--emerald);box-shadow:0 0 8px rgba(47,230,168,.7)}
+
+.term-bar span{
+    margin-left:auto;
+    color:var(--muted);
+    font-size:8.5px;
+    letter-spacing:1.8px;
+    font-weight:600;
+}
+
+.term-body{padding:14px}
 
 .sub-label{
     color:var(--muted);
-    font-size:8px;
-    margin-bottom:8px;
+    font-size:8.5px;
+    letter-spacing:1.6px;
+    font-weight:600;
+    margin-bottom:9px;
 }
 
 .sub-row{
     display:flex;
-    gap:7px;
+    gap:8px;
 }
 
 .sub-input{
     flex:1;
     min-width:0;
-    height:42px;
-    border-radius:11px;
-    background:#020711;
-    border:1px solid rgba(255,255,255,.06);
-    color:#83efff;
-    padding:0 11px;
-    font-size:9px;
+    height:46px;
+    border-radius:13px;
+    background:rgba(0,0,0,.5);
+    border:1px solid rgba(255,255,255,.09);
+    color:var(--emerald);
+    padding:0 14px;
+    font-family:'Space Grotesk',monospace;
+    font-size:11.5px;
+    letter-spacing:.3px;
     outline:none;
+    transition:.3s;
 }
+.sub-input:focus{
+    border-color:rgba(47,230,168,.55);
+    box-shadow:0 0 0 3px rgba(47,230,168,.12);
+}
+.sub-input::selection{background:rgba(47,230,168,.3)}
 
 .btn{
     border:0;
-    color:#fff;
-    font-weight:900;
-    border-radius:11px;
-    transition:.18s;
+    color:#06060a;
+    font-weight:700;
+    font-size:11px;
+    letter-spacing:1.2px;
+    border-radius:13px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .3s,filter .3s;
+    font-family:'Inter',sans-serif;
 }
 
-.btn:active{
-    transform:scale(.96);
+.btn::after{
+    content:"";
+    position:absolute;
+    top:0;left:-70%;
+    width:45%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-20deg);
+    transition:left .55s ease;
 }
+.btn:hover::after{left:130%}
+.btn:active{transform:scale(.95)}
 
 .copy-btn{
-    width:72px;
-    background:linear-gradient(135deg,#00bfff,#2563ff);
-    box-shadow:0 0 18px rgba(0,191,255,.16);
+    width:98px;
+    background:linear-gradient(135deg,var(--emerald),#16c79a);
+    box-shadow:0 8px 22px rgba(47,230,168,.26);
+}
+.copy-btn.ok{
+    background:linear-gradient(135deg,var(--gold),#f0a92a);
+    box-shadow:0 8px 22px rgba(255,203,87,.3);
 }
 
 .action-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
-    margin-top:9px;
+    gap:9px;
+    margin-top:11px;
 }
 
 .action{
-    min-height:44px;
-    background:rgba(0,234,255,.065);
-    border:1px solid rgba(0,234,255,.14);
-    color:#8cefff;
-    font-size:9px;
-}
-
-.action.purple{
-    background:rgba(123,77,255,.08);
-    border-color:rgba(123,77,255,.18);
-    color:#c0adff;
-}
-
-/* USAGE GRAPH */
-
-.graph-box{
-    padding:15px;
-    border-radius:18px;
-    background:rgba(1,7,18,.68);
-    border:1px solid rgba(255,255,255,.05);
-}
-
-.graph-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:13px;
-}
-
-.graph-total{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    color:#fff;
+    min-height:47px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--line);
+    color:var(--text);
     font-size:10px;
-    font-weight:900;
+    letter-spacing:1.3px;
+}
+.action:hover{
+    border-color:rgba(47,230,168,.45);
+    color:var(--emerald);
+    box-shadow:0 0 24px rgba(47,230,168,.14);
 }
 
-.graph-dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:var(--cyan);
-    box-shadow:0 0 9px var(--cyan);
+.action.alt{
+    background:rgba(255,203,87,.07);
+    border-color:rgba(255,203,87,.24);
+    color:var(--gold);
+}
+.action.alt:hover{
+    border-color:rgba(255,203,87,.6);
+    box-shadow:0 0 24px rgba(255,203,87,.18);
 }
 
-.graph-note{
-    color:var(--muted);
-    font-size:8px;
-}
+/* ============ WAVE / USAGE TANK ============ */
 
-.graph{
+.tank{
     position:relative;
-    height:150px;
-    overflow:hidden;
-    border-radius:13px;
+    height:172px;
+    border-radius:18px;
     background:
-        linear-gradient(rgba(0,234,255,.045) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(0,234,255,.035) 1px,transparent 1px);
-    background-size:100% 30px,50px 100%;
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),
+        rgba(0,0,0,.35);
+    background-size:100% 34px,44px 100%,auto;
+    border:1px solid var(--line);
+    overflow:hidden;
 }
 
-.graph svg{
+.tank-fill{
     position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
+    left:0;right:0;bottom:0;
+    height:0;
+    background:linear-gradient(180deg,rgba(47,230,168,.34),rgba(47,230,168,.05));
+    transition:height 1.6s cubic-bezier(.16,1,.3,1);
 }
 
-.graph-fill{
-    fill:url(#graphFill);
+.tank-wave{
+    position:absolute;
+    top:-17px;
+    left:0;
+    width:200%;
+    height:19px;
+    animation:waveSlide 5s linear infinite;
 }
 
-.graph-line{
-    fill:none;
-    stroke:url(#graphLine);
-    stroke-width:3;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    filter:drop-shadow(0 0 5px rgba(0,234,255,.5));
+.tank-wave path{fill:rgba(47,230,168,.85)}
+
+@keyframes waveSlide{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
 }
 
-.graph-labels{
+.tank-mark{
+    position:absolute;
+    left:14px;right:14px;
+    height:1px;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 6px,transparent 6px 12px);
+}
+
+.tank-badge{
+    position:absolute;
+    top:12px;left:14px;
     display:flex;
-    justify-content:space-between;
-    margin-top:8px;
-    color:#53627c;
-    font-size:7px;
-}
-
-/* CONFIGS */
-
-.config{
-    padding:14px;
-    margin-bottom:9px;
-    border-radius:17px;
-    background:rgba(1,7,18,.72);
-    border:1px solid rgba(255,255,255,.055);
-    transition:.2s;
-}
-
-.config:last-child{
-    margin-bottom:0;
-}
-
-.config:active{
-    border-color:rgba(0,234,255,.3);
-}
-
-.config-top{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:10px;
-}
-
-.config-title{
-    font-size:11px;
-    font-weight:900;
+    align-items:center;
+    gap:8px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.8px;
     color:#fff;
+    z-index:3;
 }
 
-.config-tag{
-    margin-top:5px;
-    color:#71809c;
-    font-size:8px;
+.tank-badge i{
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--emerald);
+    box-shadow:0 0 10px var(--emerald);
+    animation:blink 1.6s ease-in-out infinite;
 }
 
-.config-actions{
+.tank-note{
+    position:absolute;
+    top:13px;right:14px;
+    color:var(--muted);
+    font-size:8.5px;
+    letter-spacing:1.2px;
+    z-index:3;
+}
+
+.tank-labels{
     display:flex;
-    gap:5px;
+    justify-content:space-between;
+    margin-top:10px;
+    color:#5c6577;
+    font-size:8px;
+    letter-spacing:1.6px;
+    font-weight:600;
+}
+
+/* ============ CONFIGS ============ */
+
+.cfg{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:15px;
+    margin-bottom:11px;
+    border-radius:18px;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--line);
+    transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .35s,background .35s;
+    overflow:hidden;
+}
+
+.cfg::before{
+    content:"";
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:3px;
+    background:linear-gradient(180deg,var(--emerald),var(--gold));
+    transform:scaleY(0);
+    transform-origin:top;
+    transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+
+.cfg:hover{
+    transform:translateX(7px);
+    border-color:rgba(47,230,168,.35);
+    background:rgba(255,255,255,.055);
+}
+.cfg:hover::before{transform:scaleY(1)}
+
+[dir="rtl"] .cfg:hover{transform:translateX(-7px)}
+
+.cfg-num{
+    flex-shrink:0;
+    width:38px;height:38px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:12px;
+    font-weight:700;
+    color:var(--gold);
+    background:rgba(255,203,87,.1);
+    border:1px solid rgba(255,203,87,.26);
+}
+
+.cfg-main{flex:1;min-width:0}
+
+.cfg-title{
+    font-size:12.5px;
+    font-weight:700;
+    color:#fff;
+    word-break:break-word;
+    letter-spacing:.2px;
+}
+
+.cfg-tag{
+    margin-top:4px;
+    color:var(--muted);
+    font-size:9.5px;
+    line-height:1.45;
+    word-break:break-word;
+}
+
+.cfg-acts{
+    display:flex;
+    gap:6px;
     flex-shrink:0;
 }
 
-.small-btn{
-    padding:8px 10px;
-    font-size:8px;
+.mini-btn{
+    padding:10px 13px;
+    font-size:9px;
+    letter-spacing:1.1px;
+    border-radius:11px;
 }
 
-.small-copy{
-    background:linear-gradient(135deg,#00bfff,#2563ff);
+.mb-copy{
+    background:linear-gradient(135deg,var(--emerald),#16c79a);
+    box-shadow:0 6px 18px rgba(47,230,168,.22);
 }
-
-.small-qr{
-    background:rgba(123,77,255,.13);
-    border:1px solid rgba(123,77,255,.2);
-    color:#c5b8ff;
+.mb-qr{
+    background:rgba(255,255,255,.07);
+    border:1px solid var(--line);
+    color:var(--text);
 }
+.mb-qr:hover{border-color:rgba(255,203,87,.5);color:var(--gold)}
 
-/* CREATED BY */
+/* ============ CREATOR ============ */
 
 .creator{
-    margin-top:14px;
-    padding:17px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:12px;
+    gap:14px;
+    padding:17px;
 }
 
-.creator-left{
-    display:flex;
-    align-items:center;
-    gap:11px;
+.creator-l{display:flex;align-items:center;gap:13px;min-width:0}
+
+.avatar{
+    position:relative;
+    width:44px;height:44px;
+    flex-shrink:0;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:conic-gradient(from 0deg,var(--emerald),var(--gold),var(--rose),var(--emerald));
+    animation:spin 6s linear infinite;
 }
 
-.creator-icon{
-    width:39px;
-    height:39px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,234,255,.07);
-    border:1px solid rgba(0,234,255,.13);
-    color:var(--cyan);
+.avatar span{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:#0a0a10;
+    display:grid;
+    place-items:center;
+    color:var(--emerald);
+    font-size:16px;
+    animation:spin 6s linear infinite reverse;
 }
 
-.creator-title{
-    font-size:9px;
-    color:var(--muted);
-}
+.creator-title{font-size:9px;letter-spacing:1.8px;color:var(--muted);font-weight:600}
 
 .creator-name{
-    margin-top:4px;
-    font-size:11px;
-    font-weight:900;
+    margin-top:3px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:13px;
+    font-weight:700;
 }
 
 .creator-link{
     text-decoration:none;
-    color:#8cefff;
-    font-size:9px;
-    font-weight:900;
-    padding:9px 12px;
-    border-radius:11px;
-    background:rgba(0,234,255,.06);
-    border:1px solid rgba(0,234,255,.13);
+    color:#06060a;
+    background:linear-gradient(135deg,var(--gold),#f0a92a);
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.5px;
+    padding:11px 15px;
+    border-radius:13px;
+    box-shadow:0 8px 22px rgba(255,203,87,.24);
+    transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .3s;
+    white-space:nowrap;
 }
+.creator-link:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(255,203,87,.34)}
 
-/* FOOTER */
+/* ============ FOOTER ============ */
 
-.footer{
-    text-align:center;
-    padding:20px 5px 14px;
-}
+.footer{text-align:center;padding:26px 6px 8px}
 
 .footer-main{
-    color:#4e5d76;
-    font-size:9px;
+    color:#5d6678;
+    font-size:10px;
+    letter-spacing:.6px;
 }
-
 .footer-main b{
-    color:var(--cyan);
+    color:var(--emerald);
+    font-weight:700;
 }
 
 .footer-sub{
-    margin-top:6px;
-    color:#35425a;
-    font-size:7px;
-    letter-spacing:1.5px;
+    margin-top:8px;
+    color:#333a49;
+    font-size:8px;
+    letter-spacing:3.4px;
+    font-weight:600;
 }
 
-/* QR MODAL */
+/* ============ QR MODAL ============ */
 
 #qrModal{
     position:fixed;
@@ -679,174 +964,132 @@ button{
     align-items:center;
     justify-content:center;
     padding:20px;
-    background:rgba(0,0,0,.84);
-    backdrop-filter:blur(14px);
+    background:rgba(3,3,6,.86);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
 }
-
 #qrModal.active{
     display:flex;
+    animation:fadeIn .3s ease;
 }
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-.qr-wrap{
-    text-align:center;
-}
+.qr-wrap{text-align:center;animation:pop .4s cubic-bezier(.16,1,.3,1)}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(18px)}to{opacity:1;transform:none}}
 
-.qr-box{
-    padding:20px;
-    border-radius:24px;
+.qr-\boxed{
+    padding:22px;
+    border-radius:26px;
     background:#fff;
-    box-shadow:
-        0 0 50px rgba(0,234,255,.22);
+    box-shadow:0 0 60px rgba(47,230,168,.3),0 0 120px rgba(255,203,87,.15);
 }
 
 .qr-close{
-    margin-top:13px;
-    color:#94a3b8;
-    font-size:9px;
-    font-weight:800;
+    margin-top:15px;
+    color:var(--muted);
+    font-size:9.5px;
+    letter-spacing:1.6px;
+    font-weight:600;
 }
 
-/* TOAST */
+/* ============ TOAST ============ */
 
 .toast{
     position:fixed;
     z-index:2000;
     left:50%;
-    bottom:20px;
-    transform:translate(-50%,100px);
-    padding:11px 18px;
+    bottom:24px;
+    transform:translate(-50%,120px);
+    opacity:0;
+    padding:13px 22px;
     border-radius:30px;
-    background:#071525;
-    border:1px solid rgba(0,234,255,.25);
-    color:#8cefff;
-    font-size:9px;
-    font-weight:900;
-    box-shadow:0 0 25px rgba(0,234,255,.15);
-    transition:.25s;
+    background:#0c0c13;
+    border:1px solid rgba(47,230,168,.4);
+    color:var(--emerald);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.1px;
+    box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 30px rgba(47,230,168,.16);
+    transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .4s;
     white-space:nowrap;
+    max-width:92vw;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
+.toast.show{transform:translate(-50%,0);opacity:1}
 
-.toast.show{
-    transform:translate(-50%,0);
+/* ============ RESPONSIVE ============ */
+
+@media(max-width:640px){
+    .stats{grid-template-columns:repeat(2,1fr)}
 }
-
-/* MOBILE */
 
 @media(max-width:520px){
-
-    .page{
-        padding:10px;
-    }
-
-    .header{
-        padding:14px;
-    }
-
-    .logo{
-        width:40px;
-        height:40px;
-    }
-
-    .brand h1{
-        font-size:15px;
-    }
-
-    .status{
-        display:none;
-    }
-
-    .username{
-        font-size:24px;
-    }
-
-    .usage-circle,
-    .usage-circle svg{
-        width:195px;
-        height:195px;
-    }
-
-    .circle-inner{
-        inset:29px;
-    }
-
-    .circle-percent{
-        font-size:32px;
-    }
-
-    .stat{
-        min-height:86px;
-        padding:12px 10px;
-    }
-
-    .section{
-        padding:15px;
-    }
-
-    .creator{
-        padding:14px;
-    }
+    .page{padding:12px 10px 28px}
+    .topbar{padding:12px 13px}
+    .mark{width:41px;height:41px;border-radius:13px}
+    .mark b{font-size:18px}
+    .brand h1{font-size:15px}
+    .brand p{font-size:7.5px;letter-spacing:1.8px}
+    .status{display:none}
+    .hero{padding:26px 14px 16px}
+    .username{font-size:27px}
+    .bignum{font-size:54px}
+    .meter{height:23px}
+    .sec{padding:16px}
+    .creator{flex-direction:column;align-items:flex-start}
+    .creator-link{width:100%;text-align:center}
 }
 
-@media(max-width:360px){
-
-    .brand p{
-        display:none;
-    }
-
-    .lang-btn{
-        padding:0 8px;
-    }
-
-    .stats{
-        gap:7px;
-    }
-
-    .stat-value{
-        font-size:13px;
-    }
-
-    .action-grid{
-        grid-template-columns:1fr;
-    }
-
-    .sub-row{
-        flex-direction:column;
-    }
-
-    .copy-btn{
-        width:100%;
-        height:40px;
-    }
+@media(max-width:430px){
+    .cfg{flex-wrap:wrap}
+    .cfg-acts{width:100%;justify-content:flex-end}
+    .sub-row{flex-direction:column}
+    .copy-btn{width:100%;height:46px}
+    .action-grid{grid-template-columns:1fr}
+    .brand p{display:none}
 }
+
+@media(max-width:350px){
+    .stats{grid-template-columns:1fr}
+    .username{font-size:23px}
+    .bignum{font-size:46px}
+}
+
+@media(prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+
 </style>
 </head>
 
 <body>
 
+<div class="fx">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+</div>
+<div class="fx-grid"></div>
+<div class="fx-vignette"></div>
+
+
 <div class="page">
 
-    <!-- HEADER -->
-    <header class="card header">
+    <!-- TOP BAR -->
+    <header class="topbar reveal">
 
         <div class="brand">
-
-            <div class="logo">N</div>
-
+            <div class="mark"><b>N</b></div>
             <div>
                 <h1>Nikan Dev Panel</h1>
-                <p id="brandSubtitle">SUBSCRIPTION PANEL</p>
+                <p id="brandSubtitle">ACCESS PORTAL</p>
             </div>
-
         </div>
 
-        <div class="header-actions">
+        <div class="top-actions">
 
-            <button
-                class="lang-btn"
-                onclick="toggleLanguage()"
-                id="langBtn">
-                فارسی
-            </button>
+            <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">فارسی</button>
 
             <div class="status">
                 <span class="status-dot"></span>
@@ -858,152 +1101,71 @@ button{
     </header>
 
 
-    <!-- USER / USAGE -->
-    <section class="card hero">
+    <!-- HERO -->
+    <section class="panel hero reveal" style="--d:90ms">
 
-        <div class="user-label" id="userLabel">
-            SUBSCRIPTION USER
-        </div>
+        <div class="user-label" id="userLabel">SUBSCRIPTION USER</div>
 
-        <div class="username">
-            {{ user_name }}
-        </div>
+        <div class="username">{{ user_name }}</div>
 
+        <div class="bignum"><b id="pctNum" data-target="{{ percent }}">{{ percent }}</b><span>%</span></div>
 
-        <div class="usage-circle">
+        <div class="bigcap" id="usedLabel">USED</div>
 
-            <svg viewBox="0 0 218 218">
+        <div class="meter" id="meter"></div>
+        <div class="meter-sweep"></div>
 
-                <defs>
-
-                    <linearGradient
-                        id="usageGradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%">
-
-                        <stop offset="0%" stop-color="#00eaff"/>
-                        <stop offset="50%" stop-color="#168cff"/>
-                        <stop offset="100%" stop-color="#7b4dff"/>
-
-                    </linearGradient>
-
-                </defs>
-
-                <circle
-                    class="circle-bg"
-                    cx="109"
-                    cy="109"
-                    r="88">
-                </circle>
-
-                <circle
-                    id="usageCircle"
-                    class="circle-value"
-                    cx="109"
-                    cy="109"
-                    r="88"
-                    stroke-dasharray="552.92"
-                    stroke-dashoffset="{{ 552.92 - (552.92 * percent / 100) }}">
-                </circle>
-
-            </svg>
-
-            <div class="circle-inner">
-
-                <div class="circle-percent">
-                    {{ percent }}%
-                </div>
-
-                <div
-                    class="circle-label"
-                    id="usedLabel">
-                    USED
-                </div>
-
-                <div class="circle-total">
-                    {{ quota_gb }} GB
-                </div>
-
-            </div>
-
+        <div class="mini">
+            <div><i class="k-used"></i><span id="miniUsedLabel">USED</span> <b>{{ used_gb }} GB</b></div>
+            <div><i class="k-total"></i><span id="miniTotalLabel">TOTAL</span> <b>{{ quota_gb }} GB</b></div>
         </div>
 
 
         <!-- STATS -->
-
         <div class="stats">
 
             <div class="stat">
-
-                <div class="stat-icon"></div>
-
-                <div
-                    class="stat-label"
-                    data-en="TOTAL TRAFFIC"
-                    data-fa="حجم کل">
-                    TOTAL TRAFFIC
+                <div class="stat-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="8" ry="3"/>
+                        <path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/>
+                        <path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>
+                    </svg>
                 </div>
-
-                <div class="stat-value">
-                    {{ quota_gb }} GB
-                </div>
-
+                <div class="stat-label" data-en="TOTAL TRAFFIC" data-fa="حجم کل">TOTAL TRAFFIC</div>
+                <div class="stat-value"><span class="num" data-target="{{ quota_gb }}" data-dec="1">{{ quota_gb }}</span><span class="unit">GB</span></div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-icon"></div>
-
-                <div
-                    class="stat-label"
-                    data-en="USED TRAFFIC"
-                    data-fa="حجم مصرف شده">
-                    USED TRAFFIC
+                <div class="stat-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2 3 14h8l-1 8 10-12h-8z"/>
+                    </svg>
                 </div>
-
-                <div class="stat-value">
-                    {{ used_gb }} GB
-                </div>
-
+                <div class="stat-label" data-en="USED TRAFFIC" data-fa="حجم مصرف شده">USED TRAFFIC</div>
+                <div class="stat-value"><span class="num" data-target="{{ used_gb }}" data-dec="1">{{ used_gb }}</span><span class="unit">GB</span></div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-icon"></div>
-
-                <div
-                    class="stat-label"
-                    data-en="REMAINING"
-                    data-fa="حجم باقی مانده">
-                    REMAINING
+                <div class="stat-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 1 1-9-9"/>
+                        <path d="M21 3v6h-6"/>
+                    </svg>
                 </div>
-
-                <div class="stat-value">
-                    {{ remaining_gb }} GB
-                </div>
-
+                <div class="stat-label" data-en="REMAINING" data-fa="حجم باقی مانده">REMAINING</div>
+                <div class="stat-value"><span class="num" data-target="{{ remaining_gb }}" data-dec="1">{{ remaining_gb }}</span><span class="unit">GB</span></div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-icon"></div>
-
-                <div
-                    class="stat-label"
-                    data-en="DAYS LEFT"
-                    data-fa="روزهای باقی مانده">
-                    DAYS LEFT
+                <div class="stat-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="17" rx="3"/>
+                        <path d="M3 9h18M8 2v4M16 2v4"/>
+                    </svg>
                 </div>
-
-                <div class="stat-value">
-                    {{ days_left }} DAYS
-                </div>
-
+                <div class="stat-label" data-en="DAYS LEFT" data-fa="روزهای باقی مانده">DAYS LEFT</div>
+                <div class="stat-value"><span class="num" data-target="{{ days_left }}" data-dec="0">{{ days_left }}</span><span class="unit" id="daysUnit" data-en="DAYS" data-fa="روز">DAYS</span></div>
             </div>
 
         </div>
@@ -1012,65 +1174,33 @@ button{
 
 
     <!-- SUBSCRIPTION -->
+    <section class="panel sec reveal" style="--d:160ms">
 
-    <section class="card section">
-
-        <div class="section-title">
-
-            <h2 id="subTitle">
-                SUBSCRIPTION LINK
-            </h2>
-
-            <span id="syncText">
-                SYNC READY
-            </span>
-
+        <div class="sec-head">
+            <h2 id="subTitle">SUBSCRIPTION LINK</h2>
+            <span class="chip" id="syncText">SYNC READY</span>
         </div>
 
+        <div class="terminal">
 
-        <div class="sub-box">
-
-            <div
-                class="sub-label"
-                id="personalSub">
-                YOUR PERSONAL SUBSCRIPTION
+            <div class="term-bar">
+                <i></i><i></i><i></i>
+                <span id="terminalTag">SECURE CHANNEL</span>
             </div>
 
+            <div class="term-body">
 
-            <div class="sub-row">
+                <div class="sub-label" id="personalSub">YOUR PERSONAL SUBSCRIPTION</div>
 
-                <input
-                    id="subUrlField"
-                    class="sub-input"
-                    value="{{ sub_url }}"
-                    readonly
-                >
+                <div class="sub-row">
+                    <input id="subUrlField" class="sub-input" value="{{ sub_url }}" readonly>
+                    <button onclick="copySubLink()" class="btn copy-btn" id="copySubBtn">COPY</button>
+                </div>
 
-                <button
-                    onclick="copySubLink()"
-                    class="btn copy-btn"
-                    id="copySubBtn">
-                    COPY
-                </button>
-
-            </div>
-
-
-            <div class="action-grid">
-
-                <button
-                    onclick="openSubLink()"
-                    class="btn action"
-                    id="openBtn">
-                    OPEN SUBSCRIPTION
-                </button>
-
-                <button
-                    onclick="copyAllConfigs()"
-                    class="btn action purple"
-                    id="copyAllBtn">
-                    COPY ALL CONFIGS
-                </button>
+                <div class="action-grid">
+                    <button onclick="openSubLink()" class="btn action" id="openBtn">OPEN SUBSCRIPTION</button>
+                    <button onclick="copyAllConfigs()" class="btn action alt" id="copyAllBtn">COPY ALL CONFIGS</button>
+                </div>
 
             </div>
 
@@ -1079,193 +1209,64 @@ button{
     </section>
 
 
-    <!-- USAGE GRAPH -->
+    <!-- USAGE TANK -->
+    <section class="panel sec reveal" style="--d:230ms">
 
-    <section class="card section">
+        <div class="sec-head">
+            <h2 id="usageTitle">USAGE OVERVIEW</h2>
+            <span class="chip" id="usageBadge">LIVE DATA</span>
+        </div>
 
-        <div class="section-title">
+        <div class="tank">
 
-            <h2 id="usageTitle">
-                USAGE OVERVIEW
-            </h2>
+            <div class="tank-badge"><i></i><span id="consumedText">{{ used_gb }} GB USED</span></div>
+            <div class="tank-note" id="graphNote">Current usage</div>
 
-            <span id="usageBadge">
-                LIVE DATA
-            </span>
+            <div class="tank-mark" style="top:44px"></div>
+            <div class="tank-mark" style="top:86px"></div>
+            <div class="tank-mark" style="top:128px"></div>
+
+            <div class="tank-fill" id="tankFill">
+                <svg class="tank-wave" viewBox="0 0 400 20" preserveAspectRatio="none">
+                    <path d="M0 10 Q25 2 50 10 T100 10 T150 10 T200 10 T250 10 T300 10 T350 10 T400 10 L400 20 L0 20 Z"/>
+                </svg>
+            </div>
 
         </div>
 
-
-        <div class="graph-box">
-
-            <div class="graph-head">
-
-                <div class="graph-total">
-
-                    <span class="graph-dot"></span>
-
-                    <span id="consumedText">
-                        {{ used_gb }} GB USED
-                    </span>
-
-                </div>
-
-                <div
-                    class="graph-note"
-                    id="graphNote">
-                    Current usage
-                </div>
-
-            </div>
-
-
-            <div class="graph">
-
-                <svg
-                    viewBox="0 0 700 150"
-                    preserveAspectRatio="none">
-
-                    <defs>
-
-                        <linearGradient
-                            id="graphLine"
-                            x1="0"
-                            y1="0"
-                            x2="1"
-                            y2="0">
-
-                            <stop offset="0%" stop-color="#00eaff"/>
-                            <stop offset="50%" stop-color="#168cff"/>
-                            <stop offset="100%" stop-color="#7b4dff"/>
-
-                        </linearGradient>
-
-
-                        <linearGradient
-                            id="graphFill"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1">
-
-                            <stop
-                                offset="0%"
-                                stop-color="#00bfff"
-                                stop-opacity=".20"/>
-
-                            <stop
-                                offset="100%"
-                                stop-color="#00bfff"
-                                stop-opacity="0"/>
-
-                        </linearGradient>
-
-                    </defs>
-
-
-                    <!-- Decorative usage curve.
-                         The real current usage is shown above
-                         and in the main percentage ring. -->
-
-                    <path
-                        class="graph-fill"
-                        d="
-                        M0 119
-                        C40 108 58 127 95 108
-                        S150 75 190 103
-                        S250 125 285 91
-                        S340 68 375 97
-                        S435 120 470 79
-                        S535 61 565 91
-                        S625 123 700 63
-                        L700 150
-                        L0 150 Z">
-                    </path>
-
-
-                    <path
-                        class="graph-line"
-                        d="
-                        M0 119
-                        C40 108 58 127 95 108
-                        S150 75 190 103
-                        S250 125 285 91
-                        S340 68 375 97
-                        S435 120 470 79
-                        S535 61 565 91
-                        S625 123 700 63">
-                    </path>
-
-                </svg>
-
-            </div>
-
-
-            <div class="graph-labels">
-
-                <span id="graphStart">START</span>
-                <span id="graphMiddle">USAGE</span>
-                <span id="graphEnd">NOW</span>
-
-            </div>
-
+        <div class="tank-labels">
+            <span id="graphStart">START</span>
+            <span id="graphMiddle">USAGE</span>
+            <span id="graphEnd">NOW</span>
         </div>
 
     </section>
 
 
     <!-- CONFIGS -->
+    <section class="panel sec reveal" style="--d:300ms">
 
-    <section class="card section">
-
-        <div class="section-title">
-
-            <h2 id="configsTitle">
-                YOUR CONFIGS
-            </h2>
-
-            <span>
-                {{ configs|length }} CONFIGS
-            </span>
-
+        <div class="sec-head">
+            <h2 id="configsTitle">YOUR CONFIGS</h2>
+            <span class="chip">{{ configs|length }} CONFIGS</span>
         </div>
-
 
         {% for cfg in configs %}
 
-        <div class="config">
+        <div class="cfg reveal" style="--d:{{ loop.index0 * 55 }}ms">
 
-            <div class="config-top">
+            <div class="cfg-num">{{ "%02d"|format(loop.index) }}</div>
 
-                <div>
+            <div class="cfg-main">
+                <div class="cfg-title">{{ cfg.title }}</div>
+                <div class="cfg-tag">{{ cfg.tag if cfg.tag is defined else cfg.desc }}</div>
+            </div>
 
-                    <div class="config-title">
-                        {{ cfg.title }}
-                    </div>
-
-                    <div class="config-tag">
-                        {{ cfg.tag if cfg.tag is defined else cfg.desc }}
-                    </div>
-
-                </div>
-
-
-                <div class="config-actions">
-
-                    <button
-                        onclick="copyText(`{{ cfg.config }}`)"
-                        class="btn small-btn small-copy">
-                        <span class="copyConfigText">COPY</span>
-                    </button>
-
-                    <button
-                        onclick="showMiniQR(`{{ cfg.config }}`)"
-                        class="btn small-btn small-qr">
-                        QR
-                    </button>
-
-                </div>
-
+            <div class="cfg-acts">
+                <button onclick="copyText(`{{ cfg.config }}`)" class="btn mini-btn mb-copy">
+                    <span class="copyConfigText">COPY</span>
+                </button>
+                <button onclick="showMiniQR(`{{ cfg.config }}`)" class="btn mini-btn mb-qr">QR</button>
             </div>
 
         </div>
@@ -1276,263 +1277,246 @@ button{
 
 
     <!-- CREATED BY -->
+    <section class="panel creator reveal" style="--d:360ms">
 
-    <section class="card creator">
-
-        <div class="creator-left">
-
-            <div class="creator-icon">
-                ✦
-            </div>
-
+        <div class="creator-l">
+            <div class="avatar"><span>✦</span></div>
             <div>
-
-                <div
-                    class="creator-title"
-                    id="createdText">
-                    CREATED BY
-                </div>
-
-                <div class="creator-name">
-                    Nikan Developer
-                </div>
-
+                <div class="creator-title" id="createdText">CREATED BY</div>
+                <div class="creator-name">Nikan Developer</div>
             </div>
-
         </div>
 
-
-        <a
-            href="https://t.me/NeuralDevvv"
-            target="_blank"
-            class="creator-link">
-            @NeuralDevvv
-        </a>
+        <a href="https://t.me/NeuralDevvv" target="_blank" class="creator-link">@NeuralDevvv</a>
 
     </section>
 
 
     <!-- FOOTER -->
-
     <footer class="footer">
-
         <div class="footer-main">
-            <span id="poweredText">POWERED BY</span>
-            <b>Nikan Dev Panel</b>
+            <span id="poweredText">POWERED BY</span> <b>Nikan Dev Panel</b>
         </div>
-
-        <div class="footer-sub">
-            NIKAN DEV PANEL SUBSCRIPTION
-        </div>
-
+        <div class="footer-sub">SECURE ACCESS PORTAL</div>
     </footer>
 
 </div>
 
 
 <!-- QR MODAL -->
-
-<div
-    id="qrModal"
-    onclick="closeMiniQR()">
-
-    <div
-        class="qr-wrap"
-        onclick="event.stopPropagation()">
-
-        <div class="qr-box">
-            <div id="miniQR"></div>
-        </div>
-
-        <div
-            class="qr-close"
-            id="qrCloseText">
-            TAP OUTSIDE TO CLOSE
-        </div>
-
+<div id="qrModal" onclick="closeMiniQR()">
+    <div class="qr-wrap" onclick="event.stopPropagation()">
+        <div class="qr-box"><div id="miniQR"></div></div>
+        <div class="qr-close" id="qrCloseText">TAP OUTSIDE TO CLOSE</div>
     </div>
-
 </div>
-
 
 <!-- TOAST -->
-
-<div
-    id="toast"
-    class="toast">
-    COPIED
-</div>
+<div id="toast" class="toast">COPIED</div>
 
 
 <script>
 
-/* =========================
-   SUBSCRIPTION DATA
-========================= */
-
 const subLink = "{{ sub_url }}";
+const pctTarget = Number("{{ percent }}") || 0;
 
 
-/* =========================
-   TOAST
-========================= */
+/* ---------- TOAST ---------- */
 
 function showToast(text){
-
     const toast = document.getElementById("toast");
-
     toast.innerText = text;
-
     toast.classList.add("show");
-
     clearTimeout(window.toastTimer);
-
     window.toastTimer = setTimeout(function(){
-
         toast.classList.remove("show");
-
-    },1800);
+    }, 1900);
 }
 
 
-/* =========================
-   COPY SUBSCRIPTION
-========================= */
+/* ---------- NUMBER COUNT UP ---------- */
 
-function copySubLink(){
+function countUp(el, target, dec, dur){
+    if(!el) return;
+    const start = performance.now();
+    function tick(now){
+        const p = Math.min(1, (now - start) / dur);
+        const e = 1 - Math.pow(1 - p, 3);
+        el.textContent = (target * e).toFixed(dec);
+        if(p < 1) requestAnimationFrame(tick);
+        else el.textContent = target.toFixed(dec);
+    }
+    requestAnimationFrame(tick);
+}
 
-    navigator.clipboard.writeText(subLink)
-    .then(function(){
 
-        showToast(
-            currentLang === "fa"
-            ? "لینک اشتراک کپی شد"
-            : "SUBSCRIPTION COPIED"
-        );
+/* ---------- SEGMENTED METER ---------- */
 
+function buildMeter(){
+    const meter = document.getElementById("meter");
+    if(!meter) return;
+
+    const total = 30;
+    const on = Math.round((pctTarget / 100) * total);
+    const warn = pctTarget >= 80;
+
+    meter.innerHTML = "";
+
+    for(let i = 0; i < total; i++){
+        const s = document.createElement("span");
+        s.className = "seg";
+        meter.appendChild(s);
+
+        if(i < on){
+            setTimeout(function(){
+                s.classList.add("on");
+                if(warn) s.classList.add("warn");
+            }, 320 + i * 42);
+        }
+    }
+}
+
+
+/* ---------- REVEAL + ANIMATIONS ---------- */
+
+function revealEl(el){
+    if(!el || el.classList.contains("in")) return;
+    el.classList.add("in");
+
+    el.querySelectorAll(".num").forEach(function(n){
+        if(n.dataset.done) return;
+        n.dataset.done = "1";
+        try{
+            countUp(
+                n,
+                Number(n.dataset.target) || 0,
+                Number(n.dataset.dec) || 0,
+                1200
+            );
+        }catch(e){
+            n.textContent = n.dataset.target;
+        }
+    });
+}
+
+function revealVisible(){
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    document.querySelectorAll(".reveal:not(.in)").forEach(function(el){
+        const r = el.getBoundingClientRect();
+        if(r.top < vh - 40 && r.bottom > 0) revealEl(el);
+    });
+}
+
+function runAnimations(){
+
+    const io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+            if(!entry.isIntersecting) return;
+            revealEl(entry.target);
+            io.unobserve(entry.target);
+        });
+    }, {threshold:.14, rootMargin:"0px 0px -40px 0px"});
+
+    document.querySelectorAll(".reveal").forEach(function(el){
+        io.observe(el);
     });
 
-}
-
-
-/* =========================
-   OPEN SUBSCRIPTION
-========================= */
-
-function openSubLink(){
-
-    window.open(
-        subLink,
-        "_blank"
-    );
-
-}
-
-
-/* =========================
-   COPY ALL
-========================= */
-
-function copyAllConfigs(){
-
-    try{
-
-        const raw = atob("{{ sub_raw }}");
-
-        navigator.clipboard.writeText(raw)
-        .then(function(){
-
-            showToast(
-                currentLang === "fa"
-                ? "همه کانفیگ‌ها کپی شدند"
-                : "ALL CONFIGS COPIED"
-            );
-
-        });
-
-    }catch(error){
-
-        showToast(
-            currentLang === "fa"
-            ? "خطا در کپی کانفیگ‌ها"
-            : "COPY ERROR"
-        );
-
+    // big percentage
+    const pctEl = document.getElementById("pctNum");
+    if(pctEl){
+        setTimeout(function(){
+            try{ countUp(pctEl, pctTarget, 1, 1500); }
+            catch(e){ pctEl.textContent = pctTarget.toFixed(1); }
+        }, 260);
     }
 
+    buildMeter();
+
+    // usage tank fill
+    const tank = document.getElementById("tankFill");
+    if(tank){
+        setTimeout(function(){
+            tank.style.height = Math.max(0, Math.min(100, pctTarget)) + "%";
+        }, 500);
+    }
 }
 
 
-/* =========================
-   COPY CONFIG
-========================= */
+/* ---------- COPY / QR / ACTIONS ---------- */
+
+function flashCopyBtn(btn, label){
+    if(!btn) return;
+    const original = btn.dataset.original || btn.innerText;
+    btn.dataset.original = original;
+    btn.classList.add("ok");
+    btn.innerText = "✓";
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function(){
+        btn.classList.remove("ok");
+        btn.innerText = original;
+    }, 1600);
+}
+
+function copySubLink(){
+    navigator.clipboard.writeText(subLink).then(function(){
+        flashCopyBtn(document.getElementById("copySubBtn"));
+        showToast(currentLang === "fa" ? "لینک اشتراک کپی شد" : "SUBSCRIPTION COPIED");
+    });
+}
+
+function openSubLink(){
+    window.open(subLink, "_blank");
+}
+
+function copyAllConfigs(){
+    try{
+        const raw = atob("{{ sub_raw }}");
+        navigator.clipboard.writeText(raw).then(function(){
+            showToast(currentLang === "fa" ? "همه کانفیگ‌ها کپی شدند" : "ALL CONFIGS COPIED");
+        });
+    }catch(error){
+        showToast(currentLang === "fa" ? "خطا در کپی کانفیگ‌ها" : "COPY ERROR");
+    }
+}
 
 function copyText(txt){
-
-    navigator.clipboard.writeText(txt)
-    .then(function(){
-
-        showToast(
-            currentLang === "fa"
-            ? "کانفیگ کپی شد"
-            : "CONFIG COPIED"
-        );
-
+    navigator.clipboard.writeText(txt).then(function(){
+        showToast(currentLang === "fa" ? "کانفیگ کپی شد" : "CONFIG COPIED");
     });
-
 }
-
-
-/* =========================
-   QR
-========================= */
 
 function showMiniQR(cfg){
-
-    const modal =
-        document.getElementById("qrModal");
-
-    const box =
-        document.getElementById("miniQR");
-
+    const modal = document.getElementById("qrModal");
+    const box = document.getElementById("miniQR");
     box.innerHTML = "";
-
-    new QRCode(box,{
-        text:cfg,
-        width:220,
-        height:220,
-        correctLevel:QRCode.CorrectLevel.M
+    new QRCode(box, {
+        text: cfg,
+        width: 220,
+        height: 220,
+        correctLevel: QRCode.CorrectLevel.M
     });
-
     modal.classList.add("active");
-
 }
-
 
 function closeMiniQR(){
-
-    document
-        .getElementById("qrModal")
-        .classList.remove("active");
-
+    document.getElementById("qrModal").classList.remove("active");
 }
 
 
-/* =========================
-   LANGUAGE
-========================= */
+/* ---------- LANGUAGE ---------- */
 
 let currentLang = "en";
-
 
 const translations = {
 
     en:{
         lang:"فارسی",
-        subtitle:"SUBSCRIPTION PANEL",
+        subtitle:"ACCESS PORTAL",
         status:"ACTIVE",
         user:"SUBSCRIPTION USER",
         used:"USED",
+        miniUsed:"USED",
+        miniTotal:"TOTAL",
         totalTraffic:"TOTAL TRAFFIC",
         usedTraffic:"USED TRAFFIC",
         remaining:"REMAINING",
@@ -1541,12 +1525,14 @@ const translations = {
         subscription:"SUBSCRIPTION LINK",
         sync:"SYNC READY",
         personal:"YOUR PERSONAL SUBSCRIPTION",
+        terminal:"SECURE CHANNEL",
         copy:"COPY",
         open:"OPEN SUBSCRIPTION",
         copyAll:"COPY ALL CONFIGS",
         overview:"USAGE OVERVIEW",
         live:"LIVE DATA",
         current:"Current usage",
+        consumed:"GB USED",
         start:"START",
         usage:"USAGE",
         now:"NOW",
@@ -1558,10 +1544,12 @@ const translations = {
 
     fa:{
         lang:"English",
-        subtitle:"پنل اشتراک",
+        subtitle:"پورتال دسترسی",
         status:"فعال",
         user:"کاربر اشتراک",
         used:"مصرف شده",
+        miniUsed:"مصرف",
+        miniTotal:"کل",
         totalTraffic:"حجم کل",
         usedTraffic:"حجم مصرف شده",
         remaining:"حجم باقی مانده",
@@ -1570,12 +1558,14 @@ const translations = {
         subscription:"لینک اشتراک",
         sync:"آماده همگام‌سازی",
         personal:"اشتراک اختصاصی شما",
+        terminal:"کانال امن",
         copy:"کپی",
         open:"باز کردن اشتراک",
         copyAll:"کپی همه کانفیگ‌ها",
         overview:"نمای کلی مصرف",
         live:"اطلاعات زنده",
         current:"مصرف فعلی",
+        consumed:"گیگابایت مصرف شده",
         start:"شروع",
         usage:"مصرف",
         now:"اکنون",
@@ -1589,149 +1579,86 @@ const translations = {
 
 
 function toggleLanguage(){
-
-    currentLang =
-        currentLang === "en"
-        ? "fa"
-        : "en";
-
+    currentLang = currentLang === "en" ? "fa" : "en";
     applyLanguage();
-
 }
 
 
 function applyLanguage(){
 
-    const t =
-        translations[currentLang];
+    const t = translations[currentLang];
+    const fa = currentLang === "fa";
 
-    document.documentElement.lang =
-        currentLang;
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = fa ? "rtl" : "ltr";
 
-    document.documentElement.dir =
-        currentLang === "fa"
-        ? "rtl"
-        : "ltr";
+    const set = function(id, val){
+        const el = document.getElementById(id);
+        if(el) el.innerText = val;
+    };
 
+    set("langBtn", t.lang);
+    set("brandSubtitle", t.subtitle);
+    set("statusText", t.status);
+    set("userLabel", t.user);
+    set("usedLabel", t.used);
+    set("miniUsedLabel", t.miniUsed);
+    set("miniTotalLabel", t.miniTotal);
+    set("subTitle", t.subscription);
+    set("syncText", t.sync);
+    set("terminalTag", t.terminal);
+    set("personalSub", t.personal);
+    set("openBtn", t.open);
+    set("copyAllBtn", t.copyAll);
 
-    document.getElementById("langBtn").innerText =
-        t.lang;
+    const copyBtn = document.getElementById("copySubBtn");
+    if(copyBtn){
+        delete copyBtn.dataset.original;
+        copyBtn.innerText = t.copy;
+    }
+    set("usageTitle", t.overview);
+    set("usageBadge", t.live);
+    set("graphNote", t.current);
+    set("graphStart", t.start);
+    set("graphMiddle", t.usage);
+    set("graphEnd", t.now);
+    set("configsTitle", t.configs);
+    set("createdText", t.created);
+    set("poweredText", t.powered);
+    set("qrCloseText", t.qrClose);
 
-    document.getElementById("brandSubtitle").innerText =
-        t.subtitle;
+    document.querySelectorAll(".stat-label").forEach(function(el){
+        el.innerText = fa ? el.dataset.fa : el.dataset.en;
+    });
 
-    document.getElementById("statusText").innerText =
-        t.status;
+    document.querySelectorAll(".unit[data-en]").forEach(function(el){
+        el.innerText = fa ? el.dataset.fa : el.dataset.en;
+    });
 
-    document.getElementById("userLabel").innerText =
-        t.user;
+    document.querySelectorAll(".copyConfigText").forEach(function(el){
+        el.innerText = t.copy;
+    });
 
-    document.getElementById("usedLabel").innerText =
-        t.used;
-
-    document.getElementById("subTitle").innerText =
-        t.subscription;
-
-    document.getElementById("syncText").innerText =
-        t.sync;
-
-    document.getElementById("personalSub").innerText =
-        t.personal;
-
-    document.getElementById("copySubBtn").innerText =
-        t.copy;
-
-    document.getElementById("openBtn").innerText =
-        t.open;
-
-    document.getElementById("copyAllBtn").innerText =
-        t.copyAll;
-
-    document.getElementById("usageTitle").innerText =
-        t.overview;
-
-    document.getElementById("usageBadge").innerText =
-        t.live;
-
-    document.getElementById("graphNote").innerText =
-        t.current;
-
-    document.getElementById("graphStart").innerText =
-        t.start;
-
-    document.getElementById("graphMiddle").innerText =
-        t.usage;
-
-    document.getElementById("graphEnd").innerText =
-        t.now;
-
-    document.getElementById("configsTitle").innerText =
-        t.configs;
-
-    document.getElementById("createdText").innerText =
-        t.created;
-
-    document.getElementById("poweredText").innerText =
-        t.powered;
-
-    document.getElementById("qrCloseText").innerText =
-        t.qrClose;
-
-
-    document.querySelectorAll(".stat-label")
-        .forEach(function(el){
-
-            el.innerText =
-                currentLang === "fa"
-                ? el.dataset.fa
-                : el.dataset.en;
-
-        });
-
-
-    document.querySelectorAll(".copyConfigText")
-        .forEach(function(el){
-
-            el.innerText = t.copy;
-
-        });
-
-
-    document.querySelectorAll(".stat-value")
-        .forEach(function(el,index){
-
-            if(index === 3){
-
-                const value =
-                    el.innerText
-                        .replace(" DAYS","")
-                        .replace(" روز","");
-
-                el.innerText =
-                    value +
-                    (currentLang === "fa"
-                    ? " روز"
-                    : " DAYS");
-
-            }
-
-        });
+    const consumed = document.getElementById("consumedText");
+    if(consumed){
+        consumed.innerText = "{{ used_gb }} " + (fa ? "گیگابایت مصرف شده" : "GB USED");
+    }
 
 }
 
 
-/* =========================
-   INIT
-========================= */
+/* ---------- INIT ---------- */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
+document.addEventListener("DOMContentLoaded", function(){
+    try{ applyLanguage(); }catch(e){}
+    try{ runAnimations(); }catch(e){ revealVisible(); }
 
-        applyLanguage();
-
-    }
-);
+    /* safety net: content must never stay invisible */
+    window.addEventListener("scroll", revealVisible, {passive:true});
+    window.addEventListener("resize", revealVisible);
+    setTimeout(revealVisible, 2500);
+    revealVisible();
+});
 
 </script>
 
