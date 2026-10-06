@@ -1,7 +1,7 @@
 # ✦ N I K A N · D E V · P A N E L ✦
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:05001A,45:101B4D,75:312E81,100:00BFFF&height=190&section=header&text=%E2%9C%A6%20P%20A%20B%20L%20O%20%C2%B7%20P%20A%20N%20E%20L%20%E2%9C%A6&fontColor=FFFFFF&fontSize=38&fontAlignY=42&animation=twinkling" width="100%"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:05001A,45:101B4D,75:312E81,100:00BFFF&height=190&section=header&text=%E2%9C%A6%20N%20I%20K%20A%20N%20%C2%B7%20D%20E%20V%20%C2%B7%20P%20A%20N%20E%20L%20%E2%9C%A6&fontColor=FFFFFF&fontSize=38&fontAlignY=42&animation=twinkling" width="100%"/>
 </p>
 
 <p align="center">
